@@ -282,6 +282,28 @@ blockquote {
 
 
 /* ==============================
+   画像
+============================== */
+.article-image {
+  margin: 28px 0 32px;
+}
+
+.article-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+.article-image figcaption {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #777;
+}
+
+
+/* ==============================
    スマートフォン
 ============================== */
 
