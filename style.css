@@ -261,6 +261,20 @@ blockquote {
 
 
 /* ==============================
+   最後の挨拶
+============================== */
+.closing-message {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #666;
+}
+
+
+/* ==============================
    画像
 ============================== */
 .article-image {
