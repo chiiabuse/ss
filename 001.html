@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>テスト記事タイトル</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        "Meiryo",
+        sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      line-height: 1.8;
+    }
+
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .site-header-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 24px auto;
+      background: #fff;
+      padding: 32px 40px;
+    }
+
+    .article-title {
+      font-size: 30px;
+      line-height: 1.4;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    .article-meta {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .article-body {
+      font-size: 18px;
+    }
+
+    .article-body p {
+      margin: 0 0 1.6em;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+    }
+
+    .pager a {
+      flex: 1;
+      text-decoration: none;
+      color: #0666cc;
+      font-weight: bold;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .pager a:last-child {
+      text-align: right;
+    }
+
+    .pager a:hover {
+      background: #f7f7f7;
+    }
+
+    .footer {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #888;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .site-header-inner {
+        padding: 12px 16px;
+        font-size: 18px;
+      }
+
+      .container {
+        margin: 0;
+        padding: 24px 18px 32px;
+      }
+
+      .article-title {
+        font-size: 24px;
+      }
+
+      .article-body {
+        font-size: 17px;
+      }
+
+      .pager {
+        flex-direction: column;
+      }
+
+      .pager a:last-child {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      SS ARCHIVE
+    </div>
+  </header>
+
+  <main class="container">
+
+    <article>
+
+      <h1 class="article-title">
+        テスト記事タイトル
+      </h1>
+
+      <div class="article-meta">
+        2026年9月11日
+      </div>
+
+      <div class="article-body">
+
+        <p>
+          これはテスト用の記事です。
+          スマートフォンでも読みやすくなるように、
+          画面幅に合わせてレイアウトが変わるようにしています。
+        </p>
+
+        <p>
+          PCでは本文の横幅を狭め、
+          スマートフォンでは左右の余白を小さくしています。
+          長文でも目線が左右に動きすぎない構成です。
+        </p>
+
+        <p>
+          実際のSSでは、この部分に本文をそのまま追加していけばOKです。
+          段落ごとにpタグで囲むだけなので、
+          HTML自体もそれほど複雑にはなりません。
+        </p>
+
+      </div>
+
+      <nav class="pager">
+        <a href="index.html">← 記事一覧</a>
+        <a href="002.html">次のページ →</a>
+      </nav>
+
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    © 2026 SS Archive
+  </footer>
+
+</body>
+</html>
