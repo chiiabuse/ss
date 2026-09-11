@@ -74,7 +74,8 @@ body {
 
 .article {
   width: 100%;
-  max-width: 860px;
+  max-width: 920px;
+  margin: 0 auto;
   background: #fff;
   padding: 38px 46px 50px;
   border-radius: 2px;
