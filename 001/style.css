@@ -15,17 +15,10 @@ body {
   background: #f4f5f7;
   color: #222;
   font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans",
-    "Yu Gothic",
-    YuGothic,
-    Meiryo,
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo,
     sans-serif;
 }
-
 
 /* ==============================
    ヘッダー
@@ -51,7 +44,6 @@ body {
   letter-spacing: 0.03em;
 }
 
-
 /* ==============================
    カテゴリーバー
 ============================== */
@@ -69,26 +61,24 @@ body {
   color: #555;
 }
 
-
 /* ==============================
    記事全体
 ============================== */
 
 .page {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 24px auto 60px;
   padding: 0 20px;
 }
 
 .article {
   width: 100%;
-  max-width: 760px;
+  max-width: 860px;
   background: #fff;
   padding: 38px 46px 50px;
   border-radius: 2px;
 }
-
 
 /* ==============================
    記事ヘッダー
@@ -112,7 +102,6 @@ body {
   color: #777;
 }
 
-
 /* ==============================
    本文
 ============================== */
@@ -132,7 +121,6 @@ body {
   text-indent: 1em;
 }
 
-
 /* ==============================
    小見出し
 ============================== */
@@ -144,7 +132,6 @@ body {
   line-height: 1.55;
   border-bottom: 2px solid #222;
 }
-
 
 /* ==============================
    引用
@@ -158,7 +145,6 @@ blockquote {
   font-size: 16px;
   line-height: 1.9;
 }
-
 
 /* ==============================
    SNS反応
@@ -176,7 +162,6 @@ blockquote {
 .sns-reactions p {
   margin: 0.5em 0;
 }
-
 
 /* ==============================
    コメント
@@ -212,6 +197,9 @@ blockquote {
   color: #555;
 }
 
+.comments .comment:last-child {
+  border-bottom: none;
+}
 
 /* ==============================
    前後ページ
@@ -220,7 +208,7 @@ blockquote {
 .pager {
   display: flex;
   gap: 15px;
-  margin-top: 45px;
+  margin-top: 8px;
   padding-top: 28px;
   border-top: 1px solid #ddd;
 }
@@ -259,7 +247,6 @@ blockquote {
   font-weight: 600;
 }
 
-
 /* ==============================
    最後の挨拶
 ============================== */
@@ -272,7 +259,6 @@ blockquote {
   line-height: 1.8;
   color: #666;
 }
-
 
 /* ==============================
    画像
@@ -295,12 +281,11 @@ blockquote {
   color: #777;
 }
 
-
 /* ==============================
    スマートフォン
 ============================== */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body {
     background: #fff;
   }
@@ -376,8 +361,9 @@ blockquote {
   }
 
   .pager {
-    display: block;
-    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
     padding-top: 22px;
   }
 
@@ -390,6 +376,11 @@ blockquote {
   }
 
   .pager-link.next {
+    order: 1;
     text-align: left;
+  }
+
+  .pager-link:not(.next) {
+    order: 2;
   }
 }
