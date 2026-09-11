@@ -261,27 +261,6 @@ blockquote {
 
 
 /* ==============================
-   フッター
-============================== */
-
-.site-footer {
-  padding: 30px 20px 50px;
-  text-align: center;
-  color: #888;
-  font-size: 13px;
-}
-
-.site-footer a {
-  color: #555;
-  text-decoration: none;
-}
-
-.site-footer p {
-  margin-top: 12px;
-}
-
-
-/* ==============================
    画像
 ============================== */
 .article-image {
