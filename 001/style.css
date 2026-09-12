@@ -248,6 +248,13 @@ blockquote {
   font-weight: 600;
 }
 
+.pager-link.disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
 /* ==============================
    最後の挨拶
 ============================== */
