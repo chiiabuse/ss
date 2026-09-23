@@ -46,7 +46,6 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   line-height: 1.47;
   letter-spacing: .055em;
 }
-.cover-copy { max-width: 28em; margin: 0; line-height: 1.9; color: var(--subtle); }
 .home-actions { display: grid; gap: 12px; margin-bottom: 66px; }
 .action {
   display: flex;
@@ -137,4 +136,63 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   .chapter-heading h1 { font-size: 1.35rem; }
   .story-text { font-size: 1rem; line-height: 1.82; letter-spacing: 0; }
   .chapter-footer .action { max-width: none; }
+}
+
+/* 選択肢と独立したBAD ENDページ */
+.choice-panel { margin-top: 48px; padding-top: 29px; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.choice-panel h2 {
+  margin: 0 0 18px;
+  color: var(--subtle);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+.choice-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 60px;
+  margin: 10px 0;
+  padding: 17px 18px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-decoration: none;
+}
+.choice-link:hover { background: #f6f2ec; border-color: var(--accent); }
+.choice-letter { color: var(--accent); font-weight: 700; flex: none; }
+.chapter-continuation { margin-top: 50px; scroll-margin-top: 16px; }
+.chapter-footer .action + .action { margin-top: 12px; }
+.ending-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--accent);
+  line-height: 1.6;
+  text-decoration: none;
+}
+.menu-reset { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); }
+.reset-button {
+  min-height: 48px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  font-size: .91rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.reset-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.menu-reset .section-note { margin-top: 0; }
+@media (max-width: 768px) {
+  .choice-panel { margin-top: 38px; }
+  .choice-link { padding: 16px; }
 }
