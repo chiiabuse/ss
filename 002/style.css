@@ -65,7 +65,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 .action-primary:hover { background: var(--accent-dark); }
 .action-secondary { background: transparent; color: var(--accent); }
 .action-secondary:hover { background: #f4eee9; }
-.menu-section { padding: 0 0 38px; margin: 0 0 38px; border-bottom: 1px solid var(--line); }
+.menu-section { padding: 0; margin: 0 0 38px; }
 .menu-section-last { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
 .menu-section h2 {
   margin: 0 0 20px;
@@ -134,7 +134,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   .chapter { padding: 34px 16px 70px; }
   .chapter-heading { padding-bottom: 22px; margin-bottom: 29px; }
   .chapter-heading h1 { font-size: 1.35rem; }
-  .story-text { font-size: 1rem; line-height: 1.82; letter-spacing: 0; }
+  .story-text { font-size: .97rem; line-height: 1.82; letter-spacing: 0; }
   .chapter-footer .action { max-width: none; }
 }
 
@@ -176,6 +176,13 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   color: var(--accent);
   line-height: 1.6;
   text-decoration: none;
+}
+[data-end-unread] {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  margin: 0;
+  border-bottom: 1px solid var(--line);
 }
 .menu-reset { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); }
 .reset-button {

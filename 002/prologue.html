@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#f5f2eb">
   <title>序章　俺、赤糞になってる｜転生したら野良ちいだった</title>
   <link rel="stylesheet" href="style.css">
+  <script src="reader.js" defer></script>
 </head>
-<body class="reader-page">
+<body class="reader-page" data-page="prologue.html">
   <header class="reader-header">
     <div class="reader-header-inner">
       <a class="small-brand" href="index.html">転生したら野良ちいだった</a>
@@ -201,27 +202,5 @@
       </nav>
     </article>
   </main>
-  <script>
-    const key = 'tensei-chii-progress-v1';
-    let restore = location.hash === '#continue';
-    if (restore) {
-      try {
-        const progress = JSON.parse(localStorage.getItem(key) || 'null');
-        if (progress && progress.page === 'prologue.html' && Number.isFinite(progress.y)) {
-          addEventListener('load', () => scrollTo(0, progress.y), { once: true });
-        }
-      } catch (_) { /* 保存が読めなくても本文は読める */ }
-    }
-    let pending = false;
-    function saveProgress() {
-      pending = false;
-      try { localStorage.setItem(key, JSON.stringify({ page: 'prologue.html', y: Math.round(scrollY) })); } catch (_) {}
-    }
-    addEventListener('scroll', () => {
-      if (!pending) { pending = true; requestAnimationFrame(saveProgress); }
-    }, { passive: true });
-    addEventListener('pagehide', saveProgress);
-    if (!restore) saveProgress();
-  </script>
 </body>
 </html>

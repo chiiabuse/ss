@@ -6,64 +6,73 @@
   <meta name="theme-color" content="#f5f2eb">
   <title>転生したら野良ちいだった｜目次</title>
   <link rel="stylesheet" href="style.css">
+  <script src="reader.js" defer></script>
 </head>
 <body class="home-page">
   <main class="home-shell">
-    <div class="eyebrow">分岐ＡＤＶ形式の長編ＳＳ</div>
     <header class="cover">
-      <span class="cover-line" aria-hidden="true"></span>
       <h1>転生したら<br>野良ちいだった</h1>
     </header>
-
     <nav class="home-actions" aria-label="読書を始める">
-      <a class="action action-primary" href="prologue.html">最初から読む <span aria-hidden="true">→</span></a>
-      <a class="action action-secondary" id="continue-link" href="prologue.html" hidden>続きから読む <span aria-hidden="true">→</span></a>
+      <a class="action action-primary" href="prologue.html" data-page-link>最初から読む <span aria-hidden="true">→</span></a>
+      <a class="action action-secondary" data-continue-link href="prologue.html" hidden>続きから読む <span aria-hidden="true">→</span></a>
     </nav>
-
-    <section class="menu-section" aria-labelledby="chapters-heading">
+    <section class="menu-section" data-chapters-section aria-labelledby="chapters-heading" hidden>
       <h2 id="chapters-heading">章一覧</h2>
       <ol class="chapter-list">
-        <li><a href="prologue.html"><span class="chapter-number">序章</span><span class="chapter-name">俺、赤糞になってる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="chapter1.html"><span class="chapter-number">第一章</span><span class="chapter-name">五匹は多すぎる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="0" hidden><a href="prologue.html" data-page-link><span class="chapter-number">序章</span><span class="chapter-name">俺、赤糞になってる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="1" hidden><a href="chapter1.html" data-page-link><span class="chapter-number">第一章</span><span class="chapter-name">五匹は多すぎる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="2" hidden><a href="chapter2.html" data-page-link><span class="chapter-number">第二章</span><span class="chapter-name">身体は完全にちい族</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="3" hidden><a href="chapter3.html" data-page-link><span class="chapter-number">第三章</span><span class="chapter-name">初めての外</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="4" hidden><a href="chapter4.html" data-page-link><span class="chapter-number">第四章</span><span class="chapter-name">善良な野良を演じる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="5" hidden><a href="chapter5.html" data-page-link><span class="chapter-number">第五章</span><span class="chapter-name">兄弟</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="6" hidden><a href="chapter6.html" data-page-link><span class="chapter-number">第六章</span><span class="chapter-name">それ、読めるの？</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="7" hidden><a href="chapter7.html" data-page-link><span class="chapter-number">第七章</span><span class="chapter-name">名前を忘れる</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="8" hidden><a href="chapter8.html" data-page-link><span class="chapter-number">第八章</span><span class="chapter-name">もう一人の元人間</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="9" hidden><a href="chapter9.html" data-page-link><span class="chapter-number">第九章</span><span class="chapter-name">帰還の仕組み</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="10" hidden><a href="chapter10.html" data-page-link><span class="chapter-number">第十章</span><span class="chapter-name">時間がない</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
+        <li data-chapter-index="11" hidden><a href="final.html" data-page-link><span class="chapter-number">最終章</span><span class="chapter-name">俺は誰だ</span><span class="chapter-arrow" aria-hidden="true">→</span></a></li>
       </ol>
-      <p class="section-note">第２章以降は、この試作では未実装です。</p>
     </section>
-
     <section class="menu-section menu-section-last" aria-labelledby="ends-heading">
       <h2 id="ends-heading">ＥＮＤ ＬＩＳＴ</h2>
-      <p class="section-note" id="end-01-unread">ＢＡＤ ＥＮＤ ０１　未読</p>
-      <a class="ending-entry" id="end-01-link" href="bad-end-01.html" hidden>ＢＡＤ ＥＮＤ ０１　選別 <span aria-hidden="true">→</span></a>
-      <p class="section-note">その他の結末は、この試作では未実装です。</p>
+      <div data-end-entry="01">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 01　未読</p>
+        <a class="ending-entry" href="bad-end-01.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 01　選別 <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="02">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 02　未読</p>
+        <a class="ending-entry" href="bad-end-02.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 02　親の言うことを聞いた結果 <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="03">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 03　未読</p>
+        <a class="ending-entry" href="bad-end-03.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 03　一日遅かった <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="04">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 04　未読</p>
+        <a class="ending-entry" href="bad-end-04.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 04　賢すぎる白鼠種 <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="05">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 05　未読</p>
+        <a class="ending-entry" href="bad-end-05.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 05　もう戻る必要なくない？ <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="06">
+        <p class="section-note" data-end-unread>ＢＡＤ ＥＮＤ 06　未読</p>
+        <a class="ending-entry" href="bad-end-06.html" data-page-link data-end-link hidden>ＢＡＤ ＥＮＤ 06　人間には戻れた <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="a">
+        <p class="section-note" data-end-unread>ＥＮＤ A　未読</p>
+        <a class="ending-entry" href="end-a.html" data-page-link data-end-link hidden>ＥＮＤ A　ただいま <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-end-entry="b">
+        <p class="section-note" data-end-unread>ＥＮＤ B　未読</p>
+        <a class="ending-entry" href="end-b.html" data-page-link data-end-link hidden>ＥＮＤ B　チャル、ココ、イル <span aria-hidden="true">→</span></a>
+      </div>
     </section>
     <div class="menu-reset">
-      <button class="reset-button" type="button" id="reset-history">読書記録を消去</button>
+      <button class="reset-button" type="button" data-reset-history>読書記録を消去</button>
       <p class="section-note">続きから読む・選択履歴・ＥＮＤ ＬＩＳＴの記録を消します。</p>
     </div>
   </main>
-  <script>
-    const key = 'tensei-chii-progress-v1';
-    const link = document.getElementById('continue-link');
-    try {
-      const progress = JSON.parse(localStorage.getItem(key) || 'null');
-      if (progress && ['prologue.html', 'chapter1.html', 'bad-end-01.html'].includes(progress.page) && Number.isFinite(progress.y)) {
-        link.href = progress.page + '#continue';
-        link.hidden = false;
-      }
-      if (localStorage.getItem('tensei-chii-end-01-seen-v1') === '1') {
-        document.getElementById('end-01-unread').hidden = true;
-        document.getElementById('end-01-link').hidden = false;
-      }
-    } catch (_) { /* 閲覧は保存機能なしでも可能 */ }
-    document.getElementById('reset-history').addEventListener('click', () => {
-      if (!confirm('続きから読む・選択履歴・ＥＮＤ ＬＩＳＴの記録をすべて消去しますか？')) return;
-      try {
-        ['tensei-chii-progress-v1', 'tensei-chii-chapter1-choice-v1', 'tensei-chii-end-01-seen-v1']
-          .forEach(name => localStorage.removeItem(name));
-        location.reload();
-      } catch (_) {
-        alert('記録を消去できませんでした。ブラウザの保存設定を確認してください。');
-      }
-    });
-  </script>
 </body>
 </html>

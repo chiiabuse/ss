@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#f5f2eb">
   <title>第一章　五匹は多すぎる｜転生したら野良ちいだった</title>
   <link rel="stylesheet" href="style.css">
+  <script src="reader.js" defer></script>
 </head>
-<body class="reader-page">
+<body class="reader-page" data-page="chapter1.html" data-choice-id="chapter1" data-correct="Ａ">
   <header class="reader-header">
     <div class="reader-header-inner">
       <a class="small-brand" href="index.html">転生したら野良ちいだった</a>
@@ -145,12 +146,12 @@
 　母ちいの指が近づく。触れられる前に、俺は決めなければならなかった。</div>
       <section class="choice-panel" id="choice" aria-labelledby="choice-title">
         <h2 id="choice-title">選択肢</h2>
-        <a class="choice-link" id="choose-a" href="#continuation"><span class="choice-letter">Ａ</span><span>多少無理をしてでも元気に動く。</span></a>
+        <a class="choice-link" href="#continuation" data-correct-choice><span class="choice-letter">Ａ</span><span>多少無理をしてでも元気に動く。</span></a>
         <a class="choice-link" href="bad-end-01.html"><span class="choice-letter">Ｂ</span><span>体力温存のため大人しくしている。</span></a>
         <noscript><p class="section-note">選択肢の操作にはJavaScriptが必要です。</p></noscript>
       </section>
       <section class="chapter-continuation" id="continuation" aria-label="選択後の本文" hidden>
-        <div class="story-text">　頬をかすめて通り過ぎそうになる母ちいの指を、俺は顔を上げて両手で追った。
+      <div class="story-text">　頬をかすめて通り過ぎそうになる母ちいの指を、俺は顔を上げて両手で追った。
 
 「ヂッ！　チチッ！」
 
@@ -214,50 +215,11 @@
 
 　だが、指が口元に来ると、俺は食べた。飲み込んでから、もう一度口を開けた。母ちいの指は四匹をひと回りすると、誰かを飛ばしたような早さで、また俺の前に戻ってきた。俺は、それにも口を寄せた。</div>
       <nav class="chapter-footer" aria-label="章の移動">
+        <a class="action action-primary" href="chapter2.html">第二章を読む <span aria-hidden="true">→</span></a>
         <a class="action action-secondary" href="index.html">目次へ戻る <span aria-hidden="true">→</span></a>
-        <p class="section-note">第２章以降は、この試作では未実装です。</p>
       </nav>
       </section>
     </article>
   </main>
-  <script>
-    const PAGE = 'chapter1.html';
-    const progressKey = 'tensei-chii-progress-v1';
-    function saveProgress() {
-      try { localStorage.setItem(progressKey, JSON.stringify({ page: PAGE, y: Math.round(scrollY) })); } catch (_) {}
-    }
-    addEventListener('load', () => {
-      if (location.hash === '#continue') {
-        try {
-          const saved = JSON.parse(localStorage.getItem(progressKey) || 'null');
-          if (saved && saved.page === PAGE && Number.isFinite(saved.y)) scrollTo(0, saved.y);
-        } catch (_) {}
-      } else {
-        saveProgress();
-      }
-    });
-    let pending = false;
-    addEventListener('scroll', () => {
-      if (!pending) {
-        pending = true;
-        requestAnimationFrame(() => { pending = false; saveProgress(); });
-      }
-    }, { passive: true });
-    addEventListener('pagehide', saveProgress);
-    const continuation = document.getElementById('continuation');
-    const choiceKey = 'tensei-chii-chapter1-choice-v1';
-    try {
-      if (localStorage.getItem(choiceKey) === 'A') continuation.hidden = false;
-    } catch (_) {}
-    if (location.hash === '#continuation') continuation.hidden = false;
-    document.getElementById('choose-a').addEventListener('click', event => {
-      event.preventDefault();
-      continuation.hidden = false;
-      try { localStorage.setItem(choiceKey, 'A'); } catch (_) {}
-      history.replaceState(null, '', '#continuation');
-      continuation.scrollIntoView();
-      saveProgress();
-    });
-  </script>
 </body>
 </html>
