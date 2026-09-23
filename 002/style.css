@@ -125,6 +125,11 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 .chapter-footer { margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--line); }
 .chapter-footer .action { max-width: 320px; }
 
+/* 本文の結末を読んだ後に表示する見出し。各BAD ENDで共用する。 */
+.ending-reveal { margin-top: 6rem; }
+.ending-reveal h1 { margin: 13px 0 0; font-size: 1.8rem; line-height: 1.55; }
+.ending-reveal + .chapter-footer { margin-top: 2em; }
+
 @media (max-width: 768px) {
   body { background: var(--paper); }
   .home-shell { min-height: 100svh; padding: 44px 20px 72px; }
@@ -135,6 +140,8 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   .chapter { padding: 34px 16px 70px; }
   .chapter-heading { padding-bottom: 22px; margin-bottom: 29px; }
   .chapter-heading h1 { font-size: 1.35rem; }
+  .ending-reveal { margin-top: 5rem; }
+  .ending-reveal h1 { font-size: 1.35rem; }
   .story-text { font-size: .97rem; line-height: 1.7; letter-spacing: 0; }
   .chapter-footer .action { max-width: none; }
 }
