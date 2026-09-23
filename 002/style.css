@@ -134,7 +134,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   .chapter { padding: 34px 16px 70px; }
   .chapter-heading { padding-bottom: 22px; margin-bottom: 29px; }
   .chapter-heading h1 { font-size: 1.35rem; }
-  .story-text { font-size: .97rem; line-height: 1.82; letter-spacing: 0; }
+  .story-text { font-size: .95rem; line-height: 1.82; letter-spacing: 0; }
   .chapter-footer .action { max-width: none; }
 }
 
