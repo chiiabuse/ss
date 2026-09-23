@@ -72,6 +72,18 @@
   }
 
   function initializeReader(page) {
+    // 原稿の空行だけを短い段落間隔にする。原稿自体は一つの要素内に保つ。
+    for (const story of document.querySelectorAll('.story-text')) {
+      const paragraphs = story.textContent.replace(/\r\n/g, '\n').split(/\n[ \t]*\n+/);
+      const blocks = paragraphs.map(paragraph => {
+        const block = document.createElement('span');
+        block.className = 'story-paragraph';
+        block.textContent = paragraph;
+        return block;
+      });
+      story.replaceChildren(...blocks);
+    }
+
     const chapterIndex = CHAPTER_PAGES.indexOf(page);
     if (chapterIndex >= 0) {
       const storedUnlock = storage.get(UNLOCKED_KEY);
