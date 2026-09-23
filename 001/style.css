@@ -398,6 +398,7 @@ blockquote {
 ========================= */
 
 .archive {
+  width: calc(100% - 40px);
   max-width: 820px;
   margin: 0 auto;
 }
@@ -493,6 +494,10 @@ blockquote {
 }
 
 @media (max-width: 600px) {
+  .archive {
+    width: calc(100% - 32px);
+  }
+
   .archive-header {
     padding: 20px 0 16px;
   }
