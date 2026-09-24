@@ -47,13 +47,16 @@
       entry.hidden = Number(entry.dataset.chapterIndex) > unlocked;
     }
 
+    let hasSeenEnd = false;
     for (const entry of document.querySelectorAll('[data-end-entry]')) {
       const id = entry.dataset.endEntry;
       if (storage.get(PREFIX + 'end-' + id + '-seen-v1') === '1') {
-        entry.querySelector('[data-end-unread]').hidden = true;
+        entry.hidden = false;
         entry.querySelector('[data-end-link]').hidden = false;
+        hasSeenEnd = true;
       }
     }
+    document.querySelector('[data-ends-section]').hidden = !hasSeenEnd;
 
     document.querySelector('[data-reset-history]').addEventListener('click', () => {
       if (!confirm('続きから読む・選択履歴・ＥＮＤ ＬＩＳＴの記録をすべて消去しますか？')) return;
