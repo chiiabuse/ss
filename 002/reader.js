@@ -4,8 +4,8 @@
   const PREFIX = 'muchama-academy-';
   const PROGRESS_KEY = PREFIX + 'progress-v1';
   const UNLOCKED_KEY = PREFIX + 'chapter-unlocked-v1';
-  const CHAPTER_PAGES = ['chapter1.html'];
-  const BAD_CHAPTERS = { '01': 0 };
+  const CHAPTER_PAGES = ['chapter1.html', 'chapter2.html'];
+  const BAD_CHAPTERS = { '01': 0, '02': 1 };
   const storage = {
     get(key) {
       try { return localStorage.getItem(key); } catch (_) { return null; }
@@ -31,7 +31,7 @@
         continueLink.href = saved.page + '#continue';
         continueLink.hidden = false;
         let reached = CHAPTER_PAGES.indexOf(saved.page);
-        const bad = /^bad-end-(01)\.html$/.exec(saved.page);
+        const bad = /^bad-end-(0[12])\.html$/.exec(saved.page);
         if (bad) reached = BAD_CHAPTERS[bad[1]];
         unlocked = Math.max(unlocked, reached);
       }
@@ -70,19 +70,27 @@
   }
 
   function initializeReader(page) {
-    // 原稿の空行だけを短い段落間隔にする。原稿自体は一つの要素内に保つ。
+    // 改行ごとに文頭を作り、空行がある箇所だけ段落間の余白を加える。
     for (const story of document.querySelectorAll('.story-text')) {
-      const paragraphs = story.textContent.replace(/\r\n/g, '\n').split(/\n[ \t]*\n+/);
-      const blocks = paragraphs.map(paragraph => {
+      const lines = story.textContent.replace(/\r\n?/g, '\n').split('\n');
+      const blocks = [];
+      let hasBlankLine = false;
+      for (const line of lines) {
+        if (/^[ \t\u3000]*$/.test(line)) {
+          if (blocks.length) hasBlankLine = true;
+          continue;
+        }
         const block = document.createElement('span');
         block.className = 'story-paragraph';
         // 原稿に字下げが既にある場合は一字だけ取り除き、CSSと二重にしない。
-        block.textContent = paragraph.replace(/^\u3000/, '');
+        block.textContent = line.replace(/^\u3000/, '');
+        if (hasBlankLine) block.classList.add('story-paragraph-break');
         if (/^[ \t\u3000]*[「『]/.test(block.textContent)) {
           block.classList.add('is-quoted');
         }
-        return block;
-      });
+        blocks.push(block);
+        hasBlankLine = false;
+      }
       story.replaceChildren(...blocks);
     }
 
