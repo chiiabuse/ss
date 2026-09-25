@@ -5,7 +5,7 @@
   const PROGRESS_KEY = PREFIX + 'progress-v1';
   const UNLOCKED_KEY = PREFIX + 'chapter-unlocked-v1';
   const CHAPTER_PAGES = ['chapter1.html', 'chapter2.html', 'chapter3.html', 'chapter4.html', 'chapter5.html', 'chapter6.html'];
-  const BAD_CHAPTERS = { '01': 0, '02': 1, '03': 2, '04': 3, '05': 4, '06': 5 };
+  const BAD_CHAPTERS = { '01': 0, '02': 1, '03': 2, '04': 3, '05': 4 };
   const storage = {
     get(key) {
       try { return localStorage.getItem(key); } catch (_) { return null; }
@@ -31,8 +31,9 @@
         continueLink.href = saved.page + '#continue';
         continueLink.hidden = false;
         let reached = CHAPTER_PAGES.indexOf(saved.page);
-        const bad = /^bad-end-(0[1-6])\.html$/.exec(saved.page);
+        const bad = /^bad-end-(0[1-5])\.html$/.exec(saved.page);
         if (bad) reached = BAD_CHAPTERS[bad[1]];
+        if (saved.page === 'normal-end.html' || saved.page === 'true-end.html') reached = CHAPTER_PAGES.length - 1;
         unlocked = Math.max(unlocked, reached);
       }
     } catch (_) { /* 古い保存形式でも目次は表示する */ }
