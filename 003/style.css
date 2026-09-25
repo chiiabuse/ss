@@ -120,8 +120,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
   letter-spacing: .018em;
   font-feature-settings: "palt" 0;
 }
-.story-paragraph { display: block; text-indent: 1em; }
-.story-paragraph.is-quoted { text-indent: 0; }
+.story-paragraph { display: block; }
 .story-paragraph + .story-paragraph { margin-top: .7em; }
 .chapter-footer { margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--line); }
 .chapter-footer .action { max-width: 320px; }

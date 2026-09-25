@@ -1,11 +1,15 @@
 (() => {
   'use strict';
 
-  const PREFIX = 'muchama-academy-';
+  const PREFIX = 'tensei-chii-';
   const PROGRESS_KEY = PREFIX + 'progress-v1';
   const UNLOCKED_KEY = PREFIX + 'chapter-unlocked-v1';
-  const CHAPTER_PAGES = ['chapter1.html'];
-  const BAD_CHAPTERS = { '01': 0 };
+  const CHAPTER_PAGES = [
+    'prologue.html',
+    ...Array.from({ length: 10 }, (_, i) => `chapter${i + 1}.html`),
+    'final.html'
+  ];
+  const BAD_CHAPTERS = { '01': 1, '02': 3, '03': 5, '04': 6, '05': 8, '06': 10 };
   const storage = {
     get(key) {
       try { return localStorage.getItem(key); } catch (_) { return null; }
@@ -31,8 +35,9 @@
         continueLink.href = saved.page + '#continue';
         continueLink.hidden = false;
         let reached = CHAPTER_PAGES.indexOf(saved.page);
-        const bad = /^bad-end-(01)\.html$/.exec(saved.page);
+        const bad = /^bad-end-(0[1-6])\.html$/.exec(saved.page);
         if (bad) reached = BAD_CHAPTERS[bad[1]];
+        if (saved.page === 'end-a.html' || saved.page === 'end-b.html') reached = 11;
         unlocked = Math.max(unlocked, reached);
       }
     } catch (_) { /* 古い保存形式でも目次は表示する */ }
@@ -76,11 +81,7 @@
       const blocks = paragraphs.map(paragraph => {
         const block = document.createElement('span');
         block.className = 'story-paragraph';
-        // 原稿に字下げが既にある場合は一字だけ取り除き、CSSと二重にしない。
-        block.textContent = paragraph.replace(/^\u3000/, '');
-        if (/^[ \t\u3000]*[「『]/.test(block.textContent)) {
-          block.classList.add('is-quoted');
-        }
+        block.textContent = paragraph;
         return block;
       });
       story.replaceChildren(...blocks);
