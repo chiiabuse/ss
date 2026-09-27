@@ -222,7 +222,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 }
 
 
-/* TRUE END後に解放されるキャラクター設定集 */
+/* TRUE END後に解放されるキャラクター設定 */
 .bonus-lead {
   margin: 18px 0 0;
   color: var(--subtle);
