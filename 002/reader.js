@@ -60,7 +60,6 @@
     }
 
     document.querySelector('[data-reset-history]').addEventListener('click', () => {
-      if (!confirm('続きから読む・選択履歴・エンディング一覧の記録をすべて消去しますか？')) return;
       try {
         const keys = [];
         for (let i = 0; i < localStorage.length; i += 1) {
@@ -70,7 +69,11 @@
         keys.forEach(key => localStorage.removeItem(key));
         location.reload();
       } catch (_) {
-        alert('記録を消去できませんでした。ブラウザの保存設定を確認してください。');
+        const resetButton = document.querySelector('[data-reset-history]');
+        resetButton.textContent = '消去できませんでした';
+        setTimeout(() => {
+          resetButton.textContent = '読書記録を消去';
+        }, 3000);
       }
     });
   }
