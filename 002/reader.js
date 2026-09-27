@@ -54,6 +54,11 @@
     }
     document.querySelector('[data-ends-section]').hidden = !hasSeenEnd;
 
+    const bonusSection = document.querySelector('[data-bonus-section]');
+    if (bonusSection) {
+      bonusSection.hidden = storage.get(PREFIX + 'end-true-seen-v1') !== '1';
+    }
+
     document.querySelector('[data-reset-history]').addEventListener('click', () => {
       if (!confirm('続きから読む・選択履歴・エンディング一覧の記録をすべて消去しますか？')) return;
       try {
@@ -152,6 +157,6 @@
   }
 
   const page = document.body.dataset.page;
-  if (page) initializeReader(page);
-  else initializeMenu();
+  if (document.body.classList.contains('home-page')) initializeMenu();
+  else if (page) initializeReader(page);
 })();

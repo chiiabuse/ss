@@ -123,7 +123,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 }
 .story-paragraph { display: block; text-indent: 1em; }
 .story-paragraph.is-quoted { text-indent: 0; }
-.story-paragraph-break { margin-top: 1.0em; }
+.story-paragraph-break { margin-top: 1em; }
 .chapter-footer { margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--line); }
 .chapter-footer .action { max-width: 320px; }
 
@@ -219,4 +219,104 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 @media (max-width: 768px) {
   .choice-panel { margin-top: 38px; }
   .choice-link { padding: 16px; }
+}
+
+
+/* TRUE END後に解放されるキャラクター設定集 */
+.bonus-lead {
+  margin: 18px 0 0;
+  color: var(--subtle);
+  font-size: .92rem;
+  line-height: 1.9;
+}
+.character-section + .character-section {
+  margin-top: 56px;
+}
+.character-section > h2 {
+  margin: 0 0 20px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.12rem;
+  line-height: 1.6;
+  letter-spacing: .06em;
+}
+.character-card {
+  padding: 24px 0 28px;
+  border-bottom: 1px solid var(--line);
+}
+.character-card:last-child {
+  border-bottom: 0;
+}
+.character-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.character-heading h3 {
+  margin: 0;
+  font-size: 1.22rem;
+  line-height: 1.5;
+}
+.character-tag {
+  flex: none;
+  color: var(--accent);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+.character-data {
+  margin: 0;
+}
+.character-data > div {
+  display: grid;
+  grid-template-columns: 5.5em 1fr;
+  gap: 14px;
+  padding: 8px 0;
+}
+.character-data dt {
+  color: var(--subtle);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+.character-data dd {
+  margin: 0;
+  line-height: 1.9;
+}
+.character-note {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  background: #f8f4ee;
+  border-left: 3px solid var(--accent);
+  font-size: .92rem;
+  line-height: 1.9;
+}
+.bonus-entry {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .character-section + .character-section {
+    margin-top: 44px;
+  }
+  .character-card {
+    padding: 21px 0 24px;
+  }
+  .character-heading {
+    display: block;
+    margin-bottom: 13px;
+  }
+  .character-tag {
+    display: inline-block;
+    margin-top: 5px;
+  }
+  .character-data > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 8px 0 10px;
+  }
 }
