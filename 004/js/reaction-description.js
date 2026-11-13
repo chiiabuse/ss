@@ -1,4 +1,4 @@
-import { careIds, extraActions } from './action-data.js?v=20261113-062bb22577';
+import { careIds, extraActions } from './action-data.js?v=20261113-f32e3f65f3';
 
 // Text selection is separate from simulation state transitions.
 export function reactionDescription(action, tone, kind, baby, face) {

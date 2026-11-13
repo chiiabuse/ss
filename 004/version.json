@@ -1,8 +1,4 @@
 {
-  "version": "20261113-062bb22577",
-  "features": [
-    "mortality",
-    "hunger",
-    "white-mouth-on-death"
-  ]
+  "version": "20261113-f32e3f65f3",
+  "sourceCommit": "ae36907ff40c69ed99fa49bb7f05df7cb271168e"
 }

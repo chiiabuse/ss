@@ -1,5 +1,5 @@
-import { emotionDefaults } from './emotion-config.js?v=20261113-062bb22577';
-import { babyVoice } from './speech-text.js?v=20261113-062bb22577';
+import { emotionDefaults } from './emotion-config.js?v=20261113-f32e3f65f3';
+import { babyVoice } from './speech-text.js?v=20261113-f32e3f65f3';
 
 export const pickupTypes = [
   {type:'adult',art:'evil',name:'白鼠種（成体）',sub:'成体 / 気質は個体ごとに異なる',description:'強気なもの、食い意地の張ったもの、慎ましいもの。拾うまで気質は分からない。'},

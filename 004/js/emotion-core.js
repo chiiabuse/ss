@@ -1,6 +1,6 @@
-import { careIds } from './action-data.js?v=20261113-062bb22577';
-import { traitFactor, individualDeltaFactor } from './individuality.js?v=20261113-062bb22577';
-import { emotionDefaults, emotionDeltas, personalityMultipliers, repeatLimits } from './emotion-config.js?v=20261113-062bb22577';
+import { careIds } from './action-data.js?v=20261113-f32e3f65f3';
+import { traitFactor, individualDeltaFactor } from './individuality.js?v=20261113-f32e3f65f3';
+import { emotionDefaults, emotionDeltas, personalityMultipliers, repeatLimits } from './emotion-config.js?v=20261113-f32e3f65f3';
 
 export function readEmotions(data, k){
   const defaults=emotionDefaults[k];

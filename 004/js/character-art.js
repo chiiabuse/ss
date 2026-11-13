@@ -1,3 +1,4 @@
+import { injuryStage, injurySVG } from './injury-art.js?v=20261113-f32e3f65f3';
 // Pure character SVG generation.
 export function faceSVG(face,mouthColor=null){
   const ink='#49302b';
@@ -100,15 +101,18 @@ export function faceSVG(face,mouthColor=null){
   const innerMouth=mouthColor&&mouthCavity?'<path d="'+mouthCavity+'" fill="'+mouthColor+'" stroke="none"/>':'';
   return '<g stroke="'+ink+'" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"><path d="'+brow+'" stroke-width="2.5"/>'+eyes+innerMouth+'<path d="'+mouth+'"/><path d="'+(face==='worried'||face==='scared'||face==='relieved'||face==='hurt'||face==='despair'?'':face==='cry'?'M100 135 l.6 3 M108 135 l.6 3':'M99 '+(face==='surprise'?149:face==='smile'?137:116)+' q5 2 9 0')+'" stroke-width="2.5"/>'+extra+'</g>';
 }
-function collapsedSVG(k,expression,bodyColor=null){
+function collapsedSVG(k,expression,bodyColor=null,damage=0){
+  const wounds=injuryStage(damage);
   const fur=bodyColor||(k==='red'?'#f7c9ce':'#fffefd'),ink='#49302b',white=k==='white';
   const outline='M30 192 C11 184 4 166 9 144 C12 126 24 110 45 101 C34 94 37 81 48 80 C59 78 64 87 61 94 C85 84 116 88 138 96 C137 83 149 78 158 85 C168 93 163 102 155 105 C174 118 182 135 184 151 C199 151 212 165 211 184 Q216 196 207 203 Q189 212 145 209 L45 211 Q25 212 21 202 Q14 198 30 192Z';
+  const injuries=wounds?'<defs><clipPath id="injury-skin"><path d="'+outline+'"/></clipPath></defs><g clip-path="url(#injury-skin)">'+(white?'':'<g transform="translate(25 43) scale(.98 .82)">'+injurySVG(wounds,'body')+'</g>')+'<g transform="translate(-8 104) rotate(-9 94 82) scale(.88 .74)">'+injurySVG(wounds,'head')+'</g></g>':'';
   const bib=white?'<path d="M158 169 Q182 167 195 185 Q204 199 182 204 L135 204 Q120 191 134 183Z" fill="#f8dfe4" stroke-width="3"/><ellipse cx="163" cy="190" rx="15" ry="8" fill="white" stroke="none"/>':'';
   const curl=white?'<path d="M103 37 C86 36 84 55 96 59 C110 65 118 53 111 47 L105 48" fill="none" stroke-width="5"/>':'';
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 224 240"><g stroke="'+ink+'" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="'+fur+'"><circle cx="201" cy="190" r="10" stroke-width="3.5"/><path d="'+outline+'"/>'+bib+'<g transform="translate(-8 104) rotate(-9 94 82) scale(.88 .74)">'+curl+'<g fill="'+(k==='red'?'#f09fae':'#ffb8cb')+'" stroke="none"><ellipse cx="50" cy="102" rx="18" ry="12"/><ellipse cx="157" cy="101" rx="18" ry="12"/></g><path d="M39 97 L37 104 M47 96 L45 105 M55 97 L53 105 M62 99 L60 105 M146 96 L144 104 M154 95 L152 104 M162 97 L160 105 M169 99 L167 104" stroke-width="2.5"/>'+faceSVG(expression,k==='red'||bodyColor?'#fff':null)+'</g><path d="M29 193 Q9 187 2 198 Q-2 205 13 205 L37 204 M111 202 Q99 219 108 222 Q120 223 125 208 M192 195 Q211 191 210 201 Q209 211 195 211"/></g></svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 224 240"><g stroke="'+ink+'" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="'+fur+'"><circle cx="201" cy="190" r="10" stroke-width="3.5"/><path d="'+outline+'"/>'+bib+injuries+'<g transform="translate(-8 104) rotate(-9 94 82) scale(.88 .74)">'+curl+'<g fill="'+(k==='red'?'#f09fae':'#ffb8cb')+'" stroke="none"><ellipse cx="50" cy="102" rx="18" ry="12"/><ellipse cx="157" cy="101" rx="18" ry="12"/></g><path d="M39 97 L37 104 M47 96 L45 105 M55 97 L53 105 M62 99 L60 105 M146 96 L144 104 M154 95 L152 104 M162 97 L160 105 M169 99 L167 104" stroke-width="2.5"/>'+faceSVG(expression,k==='red'||bodyColor?'#fff':null)+'</g><path d="M29 193 Q9 187 2 198 Q-2 205 13 205 L37 204 M111 202 Q99 219 108 222 Q120 223 125 208 M192 195 Q211 191 210 201 Q209 211 195 211"/></g></svg>';
 }
-export function posedSVG(k, pose, expression, frame=0,bodyColor=null){
-  if(pose==='collapsed')return collapsedSVG(k,expression,bodyColor);
+export function posedSVG(k, pose, expression, frame=0,bodyColor=null,damage=0){
+  const wounds=injuryStage(damage);
+  if(pose==='collapsed')return collapsedSVG(k,expression,bodyColor,damage);
   const fur=k==='red'?'#f7c9ce':'#fffefd',
   ink='#49302b',
   white=k==='white';
@@ -147,5 +151,5 @@ export function posedSVG(k, pose, expression, frame=0,bodyColor=null){
   const tailCenter=pose==='prone'?[185,194]:['sit','crouch'].includes(pose)?[176,192]:[164,188];
   const tail='<circle cx="'+tailCenter[0]+'" cy="'+tailCenter[1]+'" r="11" fill="'+fur+'" stroke-width="3.5"/>';
   const bib=white?'<path d="M63 157 Q64 191 104 193 Q143 191 143 157" fill="white" stroke-width="3"/><ellipse cx="104" cy="177" rx="10" ry="8" fill="#f2d9e0" stroke="none"/>':'';
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 224 240"><g stroke="'+ink+'" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="'+fur+'">'+tail+'<path d="'+(white?torso:silhouette)+'" fill="'+(white?'#f8dfe4':fur)+'"/>'+bib+feet+'<g transform="'+headTransform+'">'+(white?'<path d="'+head+'"/>':'')+curl+'<g fill="'+(k==='red'?'#f09fae':'#ffb8cb')+'" stroke="none"><ellipse cx="50" cy="102" rx="18" ry="12"/><ellipse cx="157" cy="101" rx="18" ry="12"/></g><path d="M39 97 L37 104 M47 96 L45 105 M55 97 L53 105 M62 99 L60 105 M146 96 L144 104 M154 95 L152 104 M162 97 L160 105 M169 99 L167 104" stroke-width="2.5"/><g transform="'+faceTransform+'">'+faceSVG(expression,k==='red'?'#fff':null)+'</g></g><path d="'+arm+'" fill="'+fur+'"/></g></svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 224 240"><g stroke="'+ink+'" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="'+fur+'">'+tail+'<path d="'+(white?torso:silhouette)+'" fill="'+(white?'#f8dfe4':fur)+'"/>'+bib+feet+(white||!wounds?'':'<g transform="'+(pose==='prone'?'translate(0 113) scale(1 .46)':'')+'">'+injurySVG(wounds,'body')+'</g>')+'<g transform="'+headTransform+'">'+(white?'<path d="'+head+'"/>':'')+curl+'<g fill="'+(k==='red'?'#f09fae':'#ffb8cb')+'" stroke="none"><ellipse cx="50" cy="102" rx="18" ry="12"/><ellipse cx="157" cy="101" rx="18" ry="12"/></g><path d="M39 97 L37 104 M47 96 L45 105 M55 97 L53 105 M62 99 L60 105 M146 96 L144 104 M154 95 L152 104 M162 97 L160 105 M169 99 L167 104" stroke-width="2.5"/>'+injurySVG(wounds,'head')+'<g transform="'+faceTransform+'">'+faceSVG(expression,k==='red'?'#fff':null)+'</g></g><path d="'+arm+'" fill="'+fur+'"/></g></svg>';
 }

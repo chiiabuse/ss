@@ -79,6 +79,7 @@ export const emotionDeltas = {
     -24,
     8
   ],
+  "kick": [96,-105,72],
   "slap": [
     32,
     -35,

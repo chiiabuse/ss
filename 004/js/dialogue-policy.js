@@ -1,5 +1,6 @@
-import { spokenText } from './speech-text.js?v=20261113-062bb22577';
-export { babyVoice, spokenText, normalizeChewing } from './speech-text.js?v=20261113-062bb22577';
+import { kickTiming } from './kick-motion.js?v=20261113-f32e3f65f3';
+import { spokenText } from './speech-text.js?v=20261113-f32e3f65f3';
+export { babyVoice, spokenText, normalizeChewing } from './speech-text.js?v=20261113-f32e3f65f3';
 
 // One policy for dialogue meaning and its expression. Emotion affects selection,
 // but must not turn a frightened or crying utterance into a smile afterwards.
@@ -57,6 +58,7 @@ export const idleFaces={
 export const faceTones={smile:"happy",smug:"happy",cry:"sad",worried:"cautious",alert:"cautious",hurt:"pain",despair:"despair",scared:"afraid",angry:"angry",plead:"plead",sleep:"sleep",relieved:"relieved",content:"content"};
 
 export function impactExpression(action,age){
+  if(action==='kick'&&age<kickTiming.duration)return 'hurt';
   return ["slap","poke"].includes(action)&&age<1?"hurt":null;
 }
 

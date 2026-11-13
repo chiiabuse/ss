@@ -1,6 +1,6 @@
-import { vitalLimits } from './vital-state.js?v=20261113-062bb22577';
-import { actionIds, careIds } from './action-data.js?v=20261113-062bb22577';
-import { actionTitle } from './reaction-description.js?v=20261113-062bb22577';
+import { vitalLimits, formatBodyDamage } from './vital-state.js?v=20261113-f32e3f65f3';
+import { actionIds, careIds } from './action-data.js?v=20261113-f32e3f65f3';
+import { actionTitle } from './reaction-description.js?v=20261113-f32e3f65f3';
 
 export function createEndScreen(doc){
   const get=id=>doc.getElementById(id);
@@ -10,7 +10,7 @@ export function createEndScreen(doc){
     get('end-time').textContent=stamp(Math.round(vitals.diedAt||elapsed));
     get('end-personality').textContent=profile.feature;
     get('end-emotions').textContent='ヘイト '+Math.round(emotions.hate)+' / 恐怖 '+Math.round(emotions.fear)+' / 満足 '+Math.round(emotions.satisfaction);
-    get('end-vitals').textContent='身体ダメージ '+Math.ceil(vitals.damage)+' / '+vitalLimits.damage+' · 空腹 '+Math.floor(vitals.hunger/vitalLimits.hungerSeconds*100)+'%';
+    get('end-vitals').textContent='身体ダメージ '+formatBodyDamage(vitals.damage)+' / '+vitalLimits.damage+' · 空腹 '+Math.floor(vitals.hunger/vitalLimits.hungerSeconds*100)+'%';
     const entries=[...actionIds,'restore'].filter(action=>Number.isFinite(actionCounts[action])&&actionCounts[action]>0);
     const total=entries.reduce((sum,action)=>sum+actionCounts[action],0);
     const care=entries.filter(action=>careIds.includes(action)).reduce((sum,action)=>sum+actionCounts[action],0);

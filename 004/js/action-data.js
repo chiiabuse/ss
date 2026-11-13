@@ -106,7 +106,8 @@ export const actionIds = [
   "gift",
   "pochette",
   "takePochette",
-  "slap"
+  "slap",
+  "kick"
 ];
 
 export const careIds = [
@@ -369,6 +370,18 @@ export const extraActions = {
         "エワ゛ッ！？ ポシェ！",
         "チャリュノ！ ポシェ、カエシュ！"
       ]
+    }
+  },
+  "kick": {
+    "name": "キックする",
+    "first": "蹴り飛ばされ、部屋の中を何度も跳ね返っている。",
+    "second": "元の場所へ戻り、痛みに体を震わせている。",
+    "startFace": "hurt",
+    "lines": {
+      "evil": ["アギョ！ イヂャイ！", "クソニンゲン！ モーヤメッ！"],
+      "normal": ["アギョ！ タス！", "イヂャイ……ヤメッ……！"],
+      "red": ["ビャァァー！ イヂャイ！", "ビャァァー！ ミャンミャ！ タス！"],
+      "white": ["アギョ！ イヂャイ！", "イヤッ！ チャル、ワルナ！ ヤメッ！"]
     }
   },
   "slap": {

@@ -1,4 +1,4 @@
-import { traitValue } from './individuality.js?v=20261113-062bb22577';
+import { traitValue } from './individuality.js?v=20261113-f32e3f65f3';
 // Position is measured from the person in front of the room (the bottom edge).
 export function distanceBehavior(emotions, baby=false, individual=null) {
   const {hate:h,fear:f,satisfaction:s}=emotions;

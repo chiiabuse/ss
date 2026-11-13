@@ -1,11 +1,11 @@
-import { readVitals } from './vital-state.js?v=20261113-062bb22577';
-import { readRepeatStreak } from './action-repeat.js?v=20261113-062bb22577';
-import { readIndividual } from './individuality.js?v=20261113-062bb22577';
-import { readEventMemory } from './event-memory.js?v=20261113-062bb22577';
-import { baseStates, variants } from './profile-data.js?v=20261113-062bb22577';
-import { readEmotions } from './emotion-core.js?v=20261113-062bb22577';
-import { readDespair } from './despair-state.js?v=20261113-062bb22577';
-import { readAttachment } from './item-attachment.js?v=20261113-062bb22577';
+import { readVitals } from './vital-state.js?v=20261113-f32e3f65f3';
+import { readRepeatStreak } from './action-repeat.js?v=20261113-f32e3f65f3';
+import { readIndividual } from './individuality.js?v=20261113-f32e3f65f3';
+import { readEventMemory } from './event-memory.js?v=20261113-f32e3f65f3';
+import { baseStates, variants } from './profile-data.js?v=20261113-f32e3f65f3';
+import { readEmotions } from './emotion-core.js?v=20261113-f32e3f65f3';
+import { readDespair } from './despair-state.js?v=20261113-f32e3f65f3';
+import { readAttachment } from './item-attachment.js?v=20261113-f32e3f65f3';
 
 // Startup, profile switching and reset share the same save hydration.
 export function readProfileSnapshot(saved,kind){

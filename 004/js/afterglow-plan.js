@@ -1,5 +1,5 @@
-import { careIds } from './action-data.js?v=20261113-062bb22577';
-import { emotionFace } from './emotion-core.js?v=20261113-062bb22577';
+import { careIds } from './action-data.js?v=20261113-f32e3f65f3';
+import { emotionFace } from './emotion-core.js?v=20261113-f32e3f65f3';
 
 // Brief, interruptible follow-through; no extra stat changes or saved action counts.
 export function planAfterglow(action, face, emotions, hasToy) {

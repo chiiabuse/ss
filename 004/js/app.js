@@ -1,29 +1,30 @@
-import { vitalLimits, applyVitalAction, advanceVitals, hungerStage, hungerMoment } from './vital-state.js?v=20261113-062bb22577';
-import { createEndScreen } from './end-screen.js?v=20261113-062bb22577';
-import { nextRepeatStreak } from './action-repeat.js?v=20261113-062bb22577';
-import { pickupTypes, createIndividual, individualProfile, individualInitialEmotions, individualCareCandidates, traitFactor } from './individuality.js?v=20261113-062bb22577';
-import { rememberEvent, softenEventMemory, fadeEventMemory, recallEvent, memoryCareCandidates } from './event-memory.js?v=20261113-062bb22577';
-import { bindDialogKeyboard } from './dialog-keyboard.js?v=20261113-062bb22577';
-import { readProfileSnapshot, createBehaviorStates, createReliefMemory } from './profile-state.js?v=20261113-062bb22577';
-import { resolveDisplayedFace, resolveIdleFace, resolvePose } from './display-policy.js?v=20261113-062bb22577';
-import { createRoomPainter } from './room-painter.js?v=20261113-062bb22577';
-import { sceneViewport } from './scene-viewport.js?v=20261113-062bb22577';
-import { setupCompactUI } from './compact-ui.js?v=20261113-062bb22577';
-import { advanceDespairState, despairLines, despairCareLines, despairRecoveryMoment } from './despair-state.js?v=20261113-062bb22577';
-import { chooseWeighted } from './random-choice.js?v=20261113-062bb22577';
-import { babyVoice, spokenText } from './speech-text.js?v=20261113-062bb22577';
-import { dialogueTone, dialogueFace, careCandidates, actionBaseTone, faceTones, characterVoice, isRedCrying } from './dialogue-policy.js?v=20261113-062bb22577';
-import { lossAttachmentScale, itemMomentSteps } from './item-attachment.js?v=20261113-062bb22577';
-import { distanceBehavior } from './distance-behavior.js?v=20261113-062bb22577';
-import { planAfterglow } from './afterglow-plan.js?v=20261113-062bb22577';
-import { reactionDescription, reactionOpening, actionTitle } from './reaction-description.js?v=20261113-062bb22577';
-import { profiles, careIds, actionIds, emotionalLines, guardedCare, actionLines, extraActions, repeatLines, responseGroups, responseExtras, idleExtras, idleOverrides } from './game-data.js?v=20261113-062bb22577';
-import { readSave, writeSave, removeSave, readSelected, writeSelected } from './storage.js?v=20261113-062bb22577';
-import { toneWeights, emotionFace, emotionMood, actionEmotionValues, settledEmotionValues } from './emotion-core.js?v=20261113-062bb22577';
-import { posedSVG } from './character-art.js?v=20261113-062bb22577';
-import { createCanvasPainter } from './canvas-painter.js?v=20261113-062bb22577';
-import { createCharacterPainter, characterDimensions } from './character-painter.js?v=20261113-062bb22577';
-import { idleStateCandidates } from './behavior-policy.js?v=20261113-062bb22577';
+import { createKickFlight, kickFlightFrame, kickTiming } from './kick-motion.js?v=20261113-f32e3f65f3';
+import { vitalLimits, formatBodyDamage, applyVitalAction, advanceVitals, hungerStage, hungerMoment } from './vital-state.js?v=20261113-f32e3f65f3';
+import { createLethalImpact, advanceLethalImpact } from './death-sequence.js?v=20261113-f32e3f65f3';
+import { createEndScreen } from './end-screen.js?v=20261113-f32e3f65f3';
+import { nextRepeatStreak } from './action-repeat.js?v=20261113-f32e3f65f3';
+import { pickupTypes, createIndividual, individualProfile, individualInitialEmotions, individualCareCandidates } from './individuality.js?v=20261113-f32e3f65f3';
+import { rememberEvent, softenEventMemory, fadeEventMemory, recallEvent, memoryCareCandidates } from './event-memory.js?v=20261113-f32e3f65f3';
+import { bindDialogKeyboard } from './dialog-keyboard.js?v=20261113-f32e3f65f3';
+import { readProfileSnapshot, createBehaviorStates, createReliefMemory } from './profile-state.js?v=20261113-f32e3f65f3';
+import { resolveDisplayedFace, resolveIdleFace, resolvePose } from './display-policy.js?v=20261113-f32e3f65f3';
+import { createRoomPainter } from './room-painter.js?v=20261113-f32e3f65f3';
+import { sceneViewport } from './scene-viewport.js?v=20261113-f32e3f65f3';
+import { setupCompactUI } from './compact-ui.js?v=20261113-f32e3f65f3';
+import { advanceDespairState, despairLines, despairCareLines, despairRecoveryMoment } from './despair-state.js?v=20261113-f32e3f65f3';
+import { chooseWeighted } from './random-choice.js?v=20261113-f32e3f65f3';
+import { babyVoice, spokenText } from './speech-text.js?v=20261113-f32e3f65f3';
+import { dialogueTone, dialogueFace, careCandidates, actionBaseTone, faceTones, characterVoice, isRedCrying } from './dialogue-policy.js?v=20261113-f32e3f65f3';
+import { lossAttachmentScale } from './item-attachment.js?v=20261113-f32e3f65f3';
+import { planAfterglow } from './afterglow-plan.js?v=20261113-f32e3f65f3';
+import { reactionDescription, reactionOpening, actionTitle } from './reaction-description.js?v=20261113-f32e3f65f3';
+import { profiles, careIds, actionIds, emotionalLines, guardedCare, actionLines, extraActions, repeatLines, responseGroups, responseExtras, idleExtras, idleOverrides } from './game-data.js?v=20261113-f32e3f65f3';
+import { readSave, writeSave, removeSave, readSelected, writeSelected } from './storage.js?v=20261113-f32e3f65f3';
+import { toneWeights, emotionFace, emotionMood, actionEmotionValues, settledEmotionValues } from './emotion-core.js?v=20261113-f32e3f65f3';
+import { posedSVG } from './character-art.js?v=20261113-f32e3f65f3';
+import { createCanvasPainter } from './canvas-painter.js?v=20261113-f32e3f65f3';
+import { createCharacterPainter, characterDimensions } from './character-painter.js?v=20261113-f32e3f65f3';
+import { idleStateCandidates, idleDistanceBehavior, idleItemPlan, nightSleepTransition } from './behavior-policy.js?v=20261113-f32e3f65f3';
 
 // Single simulation instance. Pure calculations and drawing live in their own modules.
 const $ = id => document.getElementById(id);
@@ -66,6 +67,8 @@ let afterglow=null;
 let reaction=null;
 let lastTone='neutral';
 let deathAge=0;
+// Death is latched immediately; only its visual transition waits for the final impact.
+let lethalImpact=null;
 let nextHungerAt=0;
 function showResults(){
   $('game-main').inert=true;
@@ -74,6 +77,7 @@ function showResults(){
 function finishRun(){
   // Lethal state has already been latched by vital-state; never schedule another reaction.
   elapsed=vitals.diedAt;
+  lethalImpact=null;
   reaction=null;
   afterglow=null;
   attention=0;
@@ -92,6 +96,7 @@ function finishRun(){
   actionUI();
 }
 function restoreEndedRun(){
+  lethalImpact=null;
   deathAge=vitalLimits.deathDisplaySeconds;
   reaction=null;afterglow=null;attention=0;
   $('speech').classList.remove('show');
@@ -102,7 +107,7 @@ function restoreEndedRun(){
   actionUI();
 }
 function vitalUI(){
-  $('body-damage').textContent=Math.ceil(vitals.damage)+' / '+vitalLimits.damage;
+  $('body-damage').textContent=formatBodyDamage(vitals.damage)+' / '+vitalLimits.damage;
   const stage=hungerStage(vitals.hunger);
   const label=['満たされている','空腹','強い空腹','衰弱'][stage];
   $('hunger-status').textContent=(vitals.dead?'終了':label)+' · '+Math.floor(vitals.hunger/vitalLimits.hungerSeconds*100)+'%';
@@ -145,7 +150,7 @@ function emotionalReply(base, action, phase=1){
   // Initial reactions describe the event itself. Later reactions may express distress,
   // but a high satisfaction score must never turn a loss or a blow into celebration.
   if(phase>0)for(const tag of ['angry','afraid','sad','plead']){
-    if(action==='slap'&&tag==='plead')continue;
+    if(['slap','kick'].includes(action)&&tag==='plead')continue;
     for(const text of emotionalLines[kind][tag])items.push({text,tone:dialogueTone(text,tag),weight:weights[tag]});
   }
 
@@ -177,7 +182,7 @@ function advanceDespair(d){
     afterglow={action:'recovered',until:t+step.duration,steps:[step],index:0,age:0};
     stateTime=0;
     attention=0;
-    distanceMode=distanceBehavior(emotions,profile.baby,individual).mode;
+    distanceMode=currentDistanceBehavior().mode;
     showAfterglowStep();
   }
 }
@@ -199,9 +204,9 @@ function attachmentReplies(action){
 }
 function startItemMoment(){
   if(vitals.dead||vitals.hunger>=120||reaction||afterglow||paused||despair.active||emotions.fear>=35||emotions.hate>=45)return false;
-  const steps=itemMomentSteps(profile.baby,toyPresent,pochettePresent);
-  if(!steps.length||Math.random()>Math.min(.9,(night?.55:.3)*traitFactor(individual,'attachment',1)))return false;
-  const choice=weighted(steps.map(step=>({step,weight:step.type==='toySleep'?(night?4:1)+itemAttachment.kumacha/600:1+itemAttachment.pochette/600})),false).step;
+  const plan=idleItemPlan({baby:profile.baby,toyPresent,pochettePresent,night,individual,itemAttachment});
+  if(!plan.candidates.length||Math.random()>plan.probability)return false;
+  const choice=weighted(plan.candidates,false).step;
   afterglow={action:'idleItem',steps:[choice],index:0,age:0};
   stateTime=0;
   showAfterglowStep();
@@ -211,7 +216,7 @@ function settleEmotions(d){
   if(!reaction)Object.assign(emotions,settledEmotionValues(emotions,d,blanketPresent));
 }
 function nextEmotionalState(){
-  return weighted(idleStateCandidates(states,{emotions,individual,current,blanketPresent,distanceMode,night}),false).index;
+  return weighted(idleStateCandidates(states,{emotions,individual,current,blanketPresent,distanceMode:currentDistanceBehavior().mode,night}),false).index;
 }
 let lastUtterance='';
 function actionReply(action, phase){
@@ -242,11 +247,13 @@ function actionUI() {
   $('gift').textContent = toyPresent ? 'クマのぬいぐるみを持っています' : 'クマのぬいぐるみを渡す';
   $('pochette').textContent = pochettePresent ? (profile.baby ? 'ポシェットで遊んでいます' : 'ポシェットを装着しています') : 'ポシェットを渡す';
   $('blanket').textContent = '布団を取り上げる';
-  $('interact-status').textContent = vitals.dead ? '終了 · リザルトを表示します' : paused ? '一時停止中' : reaction ? '反応中 · ' + reaction.count + '回目' : despair.active ? '絶望状態 · 操作できます' : afterglow ? '余韻中 · 続けて操作できます' : blanketPresent ? '操作を選んでください' : '布団を取り上げた状態';
+  $('interact-status').textContent = lethalImpact ? '衝撃を受けています' : vitals.dead ? '終了 · リザルトを表示します' : paused ? '一時停止中' : reaction ? '反応中 · ' + reaction.count + '回目' : despair.active ? '絶望状態 · 操作できます' : afterglow ? '余韻中 · 続けて操作できます' : blanketPresent ? '操作を選んでください' : '布団を取り上げた状態';
 }
 function interfere(action){
   if(!canPerformAction(action))return;
   afterglow=null;
+  const dimensions=characterDimensions(profile.baby);
+  const kickFlight=action==='kick'?createKickFlight({x,y,...dimensions,view:sceneViewport(canvas.width,canvas.height),canvasWidth:canvas.width}):null;
   const remembered=despair.active?null:recallEvent(eventMemory,action,kind,profile.baby);
   rememberEvent(eventMemory,action,individual);
   const lossScale=lossAttachmentScale(action,itemAttachment,toyPresent,pochettePresent,individual);
@@ -263,11 +270,16 @@ function interfere(action){
   changeEmotions(action,repeatStreak.count,lossScale);
   if(applyVitalAction(vitals,action,{baby:profile.baby,despairActive:despair.active,elapsed})){
     record('【'+actionTitle(action)+' / '+actionCounts[action]+'回目】身体に衝撃が加わった。');
-    finishRun();
+    lethalImpact=createLethalImpact(action,{x,y,despairActive:despair.active,kickFlight});
+    reaction=null;afterglow=null;attention=0;
+    $('speech').classList.remove('show');
+    $('action').textContent=extraActions[action]?.first||'小突かれ、体がよろけた。';
+    persist();actionUI();
     return;
   }
   if(!careIds.includes(action)&&emotions.fear>=35){reliefMemory.threatened=true;reliefMemory.calmTime=0;}
   reaction={
+    ...(kickFlight?{kickFlight}:{}),
     ...(remembered?{memory:remembered}:{}),
     action,
     age:0,
@@ -325,7 +337,11 @@ function advanceReaction(d){
     x=r.originX+Math.sin(Math.min(r.age, 1)*Math.PI/2)*20;
     y=r.originY;
   }
-  if(r.age>=2.3&&r.phase===0){
+  if(r.action==='kick'){
+    const flight=kickFlightFrame(r.kickFlight,r.age);
+    x=flight.x;y=flight.y;
+  }
+  if(r.age>=(r.action==='kick'?kickTiming.duration:2.3)&&r.phase===0){
     r.phase=1;
     softenEventMemory(eventMemory,r.action);
     if(!celebrating){
@@ -383,8 +399,11 @@ function advanceAfterglow(d){
     }else showAfterglowStep();
   }
 }
+function currentDistanceBehavior(){
+  return idleDistanceBehavior({emotions,baby:profile.baby,individual,night,blanketPresent});
+}
 function distanceTarget(){
-  const behavior=distanceBehavior(emotions,profile.baby,individual);
+  const behavior=currentDistanceBehavior();
   const s=states[current];
   return behavior.mode==='neutral'?{...behavior,x:s.tx+(['blanket','sleep'].includes(s.key)?bedOffset:0),y:s.ty}:behavior;
 }
@@ -419,12 +438,14 @@ function shelterOccludes(){
 let expressionMode='auto';
 let poseMode='auto';
 function displayedFace(k,key){
+  if(lethalImpact)return 'hurt';
   return resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMode,despairActive:despair.active,speechIsRedCry,t,speechUntil,speechFace,attention,afterglow,distanceMode,canRelieve:t<reliefMemory.until,dead:vitals.dead});
 }
 function autoFace(k,key){
   return resolveIdleFace(k,key,emotions,t<reliefMemory.until);
 }
 function currentPose(k,key){
+  if(lethalImpact)return lethalImpact.pose;
   return resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive:despair.active,afterglow,distanceMode,baby:profile.baby,individual,dead:vitals.dead});
 }
 function mini(k){
@@ -446,7 +467,7 @@ function selectProfile(k, fresh=false, pickedIndividual=null){
   if(selected)persist();
   $('end-screen').hidden=true;
   $('game-main').inert=false;
-  deathAge=0;nextHungerAt=0;
+  deathAge=0;nextHungerAt=0;lethalImpact=null;
   kind=k;
   profile=profiles[k];
   saved=fresh?{
@@ -535,7 +556,7 @@ function enter(i){
   stateTime=0;
   if(despair.active){presentDespair();return;}
   const s=states[i];
-  const behavior=distanceBehavior(emotions,profile.baby,individual);
+  const behavior=currentDistanceBehavior();
   if(behavior.mode!=='neutral'){
     presentDistance(behavior);
     record(behavior.text,'distance:'+behavior.mode);
@@ -596,7 +617,7 @@ function performReset(){
 }
 function mouse(){
   const key=vitals.dead||reaction||afterglow||despair.active||distanceMode!=='neutral'?'look':states[current].key;
-  const anchor=drawCharacter({kind,baby:profile.baby,key,x,y,t,target:distanceTarget(),face:displayedFace(kind,key),pose:currentPose(kind,key),reaction,afterglow,despairActive:despair.active,toyPresent,pochettePresent,dead:vitals.dead});
+  const anchor=drawCharacter({kind,baby:profile.baby,key,x,y,t,target:distanceTarget(),face:displayedFace(kind,key),pose:currentPose(kind,key),reaction:lethalImpact||reaction,afterglow,despairActive:despair.active,toyPresent,pochettePresent,dead:vitals.dead&&!lethalImpact,damage:vitals.damage});
   const view=sceneViewport(canvas.width,canvas.height);
   $('speech').style.left=((anchor.x*view.scale+view.offsetX)/canvas.width*100)+'%';
   $('speech').style.top=((anchor.y*view.scale+view.offsetY)/canvas.height*100)+'%';
@@ -630,13 +651,23 @@ function advanceSimulation(d){
   saveClock+=d;
   if(saveClock>5){saveClock=0;persist();}
 }
+function advanceEndSequence(seconds){
+  if(lethalImpact){
+    const impact=advanceLethalImpact(lethalImpact,seconds);
+    x=impact.x;
+    if(impact.y!==undefined)y=impact.y;
+    if(impact.complete)finishRun();
+  }else{
+    deathAge+=seconds;
+    if(deathAge>=vitalLimits.deathDisplaySeconds)showResults();
+  }
+}
 function tick(now){
   const dt=Math.max(0,Math.min((now-last)/1000,.1));
   last=now;
   if(vitals.dead){
     if(!document.hidden&&$('end-screen').hidden&&$('picker').hidden){
-      deathAge+=dt;
-      if(deathAge>=vitalLimits.deathDisplaySeconds)showResults();
+      advanceEndSequence(dt);
     }
   }else if(!document.hidden&&!paused&&$('picker').hidden&&$('reset-dialog').hidden)advanceSimulation(dt*speed);
   const view=sceneViewport(canvas.width,canvas.height);
@@ -730,6 +761,11 @@ function initialize() {
     $('light').textContent=night?'☀ 昼にする':'☾ 夜にする';
     $('light').setAttribute('aria-pressed', night);
     $('light-label').textContent='窓辺の空き部屋 · '+(night?'夜':'昼');
+    const sleepTransition=nightSleepTransition({night,blanketPresent,reaction,afterglow,despairActive:despair.active,distanceMode:currentDistanceBehavior().mode,key:states[current].key,stateTime,duration:states[current].duration});
+    if(sleepTransition.ready){
+      distanceMode='neutral';
+      stateTime=sleepTransition.stateTime;
+    }
     if(!paused){
       if(despair.active){presentDespair();record(night?'暗くなっても、伏せたまま動こうとしない。':'明るくなっても、伏せたまま力なく声を漏らした。');return;}
       if(afterglow){afterglow=null;enter(current);}

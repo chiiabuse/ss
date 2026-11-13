@@ -1,4 +1,4 @@
-import { traitFactor } from './individuality.js?v=20261113-062bb22577';
+import { traitFactor } from './individuality.js?v=20261113-f32e3f65f3';
 export function readAttachment(saved) {
   return Object.fromEntries(['kumacha','pochette'].map(key=>[key,Number.isFinite(saved?.[key])?Math.min(86400,Math.max(0,saved[key])):0]));
 }

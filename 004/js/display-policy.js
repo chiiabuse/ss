@@ -1,6 +1,7 @@
-import { idleFaces, impactExpression } from './dialogue-policy.js?v=20261113-062bb22577';
-import { emotionFace } from './emotion-core.js?v=20261113-062bb22577';
-import { distanceBehavior } from './distance-behavior.js?v=20261113-062bb22577';
+import { kickTiming } from './kick-motion.js?v=20261113-f32e3f65f3';
+import { idleFaces, impactExpression } from './dialogue-policy.js?v=20261113-f32e3f65f3';
+import { emotionFace } from './emotion-core.js?v=20261113-f32e3f65f3';
+import { distanceBehavior } from './distance-behavior.js?v=20261113-f32e3f65f3';
 
 // Explicit precedence shared by sprites and preview controls; no DOM or mutable state.
 export function resolveIdleFace(k,key,emotions,canRelieve=false){
@@ -34,6 +35,7 @@ export function resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive
     const a=reaction.action,
     phase=reaction.phase;
     if(phase===0&&reaction.memory)return reaction.memory.pose;
+    if(a==='kick')return reaction.age<kickTiming.duration?'open':'crouch';
     if(a==='pochette')return phase===0?'reach':baby?'sit':'fists';
     if(a==='feed'||a==='snack')return phase===0?'reach':'sit';
     if(a==='gift')return phase===0?'reach':'fists';

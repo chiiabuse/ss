@@ -1,5 +1,5 @@
-import { traitFactor } from './individuality.js?v=20261113-062bb22577';
-import { babyVoice } from './speech-text.js?v=20261113-062bb22577';
+import { traitFactor } from './individuality.js?v=20261113-f32e3f65f3';
+import { babyVoice } from './speech-text.js?v=20261113-f32e3f65f3';
 
 // Separate experiences from the current mood: calming down does not erase what happened.
 export const eventMemoryLimits={trigger:18,maximum:100,calmDecayPerSecond:.1};
