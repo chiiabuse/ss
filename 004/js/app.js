@@ -1,3 +1,5 @@
+import { vitalLimits, applyVitalAction, advanceVitals, hungerStage, hungerMoment } from './vital-state.js';
+import { createEndScreen } from './end-screen.js';
 import { nextRepeatStreak } from './action-repeat.js';
 import { pickupTypes, createIndividual, individualProfile, individualInitialEmotions, individualCareCandidates, traitFactor } from './individuality.js';
 import { rememberEvent, softenEventMemory, fadeEventMemory, recallEvent, memoryCareCandidates } from './event-memory.js';
@@ -29,13 +31,14 @@ const canvas = $('room');
 const ctx = canvas.getContext('2d');
 const painter = createCanvasPainter(ctx);
 const drawCharacter=createCharacterPainter(ctx,painter);
+const renderEndScreen=createEndScreen(document);
 const { drawShelter, drawRoom } = createRoomPainter(ctx,painter);
 
 let selected = readSelected(profiles);
 let kind = selected || 'evil';
 let profile = profiles[kind];
 let saved = readSave(kind);
-let {elapsed,logs,seen,toyPresent,pochettePresent,blanketPresent,bedOffset,actionCounts,repeatStreak,emotions,despair,itemAttachment,eventMemory,individual}=readProfileSnapshot(saved,kind);
+let {vitals,elapsed,logs,seen,toyPresent,pochettePresent,blanketPresent,bedOffset,actionCounts,repeatStreak,emotions,despair,itemAttachment,eventMemory,individual}=readProfileSnapshot(saved,kind);
 profile=individualProfile(profile,kind,individual);
 let paused = false;
 let speed = 1;
@@ -62,6 +65,58 @@ let distanceMode='neutral';
 let afterglow=null;
 let reaction=null;
 let lastTone='neutral';
+let deathAge=0;
+let nextHungerAt=0;
+function showResults(){
+  $('game-main').inert=true;
+  renderEndScreen({profile,elapsed,emotions,vitals,actionCounts},stamp);
+}
+function finishRun(){
+  // Lethal state has already been latched by vital-state; never schedule another reaction.
+  elapsed=vitals.diedAt;
+  reaction=null;
+  afterglow=null;
+  attention=0;
+  deathAge=0;
+  speechFace=null;
+  speechIsRedCry=false;
+  $('speech').classList.remove('show');
+  $('secondary-panel').classList.remove('is-open');
+  $('details-scrim').hidden=true;
+  $('open-details').setAttribute('aria-expanded','false');
+  $('game-main').inert=true;
+  $('action').textContent='動きが止まり、体色が変わった。';
+  $('mood').textContent='死亡した。';
+  $('live').textContent='● 終了';
+  record(vitals.cause==='hunger'?'食事を取らない時間が続き、餓死した。':'身体ダメージが限界に達し、死亡した。');
+  actionUI();
+}
+function restoreEndedRun(){
+  deathAge=vitalLimits.deathDisplaySeconds;
+  reaction=null;afterglow=null;attention=0;
+  $('speech').classList.remove('show');
+  $('action').textContent='この個体は死亡した。';
+  $('mood').textContent='死亡した。';
+  $('live').textContent='● 終了';
+  showResults();
+  actionUI();
+}
+function vitalUI(){
+  $('body-damage').textContent=Math.ceil(vitals.damage)+' / '+vitalLimits.damage;
+  const stage=hungerStage(vitals.hunger);
+  const label=['満たされている','空腹','強い空腹','衰弱'][stage];
+  $('hunger-status').textContent=(vitals.dead?'終了':label)+' · '+Math.floor(vitals.hunger/vitalLimits.hungerSeconds*100)+'%';
+}
+function startHungerMoment(){
+  if(vitals.dead||despair.active||paused||reaction||afterglow||t<nextHungerAt)return false;
+  const step=hungerMoment(vitals.hunger);
+  if(!step)return false;
+  afterglow={action:'hunger',steps:[step],index:0,age:0};
+  nextHungerAt=t+25;
+  stateTime=0;
+  showAfterglowStep();
+  return true;
+}
 function weighted(items, remember=true){
   const candidates=remember?items.map(item=>({...item,text:characterVoice(item.text,kind,item.tone)})):items;
   const item=chooseWeighted(candidates,Math.random,remember?lastUtterance:undefined);
@@ -109,7 +164,7 @@ function presentDespair(){
   speak(despairReply(),4,{tone:'despair'});
 }
 function advanceDespair(d){
-  if(paused)return;
+  if(paused||vitals.dead)return;
   const event=advanceDespairState(despair,emotions,d);
   if(event==='entered'){
     afterglow=null;
@@ -143,7 +198,7 @@ function attachmentReplies(action){
   return [item+'！ ズット、イッショ！',item+'！ カエシテ！ モーヤメッ！'].map(line=>profile.baby?babyVoice(line):line);
 }
 function startItemMoment(){
-  if(reaction||afterglow||paused||despair.active||emotions.fear>=35||emotions.hate>=45)return false;
+  if(vitals.dead||vitals.hunger>=120||reaction||afterglow||paused||despair.active||emotions.fear>=35||emotions.hate>=45)return false;
   const steps=itemMomentSteps(profile.baby,toyPresent,pochettePresent);
   if(!steps.length||Math.random()>Math.min(.9,(night?.55:.3)*traitFactor(individual,'attachment',1)))return false;
   const choice=weighted(steps.map(step=>({step,weight:step.type==='toySleep'?(night?4:1)+itemAttachment.kumacha/600:1+itemAttachment.pochette/600})),false).step;
@@ -171,7 +226,7 @@ function idleReply(state){
   return weighted(lines.map(text=>({text,tone:dialogueTone(text,tone),weight:1}))).text;
 }
 function canPerformAction(action) {
-  if (paused || reaction || !$('picker').hidden || !$('reset-dialog').hidden) return false;
+  if (vitals.dead || paused || reaction || !$('picker').hidden || !$('reset-dialog').hidden) return false;
   if (action === 'shift' || action === 'blanket') return blanketPresent;
   if (action === 'takePochette') return pochettePresent;
   if (action === 'gift') return !toyPresent;
@@ -180,12 +235,14 @@ function canPerformAction(action) {
   return actionIds.includes(action);
 }
 function actionUI() {
+  vitalUI();
+  for(const id of ['pause','speed','light','expression','pose','choose','reset','open-details'])$(id).disabled=vitals.dead;
   for (const id of actionIds) $(id).disabled = !canPerformAction(id);
   $('returnBlanket').disabled = !canPerformAction('restore');
   $('gift').textContent = toyPresent ? 'クマのぬいぐるみを持っています' : 'クマのぬいぐるみを渡す';
   $('pochette').textContent = pochettePresent ? (profile.baby ? 'ポシェットで遊んでいます' : 'ポシェットを装着しています') : 'ポシェットを渡す';
   $('blanket').textContent = '布団を取り上げる';
-  $('interact-status').textContent = paused ? '一時停止中' : reaction ? '反応中 · ' + reaction.count + '回目' : despair.active ? '絶望状態 · 操作できます' : afterglow ? '余韻中 · 続けて操作できます' : blanketPresent ? '操作を選んでください' : '布団を取り上げた状態';
+  $('interact-status').textContent = vitals.dead ? '終了 · リザルトを表示します' : paused ? '一時停止中' : reaction ? '反応中 · ' + reaction.count + '回目' : despair.active ? '絶望状態 · 操作できます' : afterglow ? '余韻中 · 続けて操作できます' : blanketPresent ? '操作を選んでください' : '布団を取り上げた状態';
 }
 function interfere(action){
   if(!canPerformAction(action))return;
@@ -204,6 +261,11 @@ function interfere(action){
   actionCounts[action]=(Number(actionCounts[action])||0)+1;
   repeatStreak=nextRepeatStreak(repeatStreak,action,elapsed);
   changeEmotions(action,repeatStreak.count,lossScale);
+  if(applyVitalAction(vitals,action,{baby:profile.baby,despairActive:despair.active,elapsed})){
+    record('【'+actionTitle(action)+' / '+actionCounts[action]+'回目】身体に衝撃が加わった。');
+    finishRun();
+    return;
+  }
   if(!careIds.includes(action)&&emotions.fear>=35){reliefMemory.threatened=true;reliefMemory.calmTime=0;}
   reaction={
     ...(remembered?{memory:remembered}:{}),
@@ -333,7 +395,7 @@ function presentDistance(behavior){
   speak(profile.baby?babyVoice(line):line,4,{tone:behavior.mode==='protest'?'angry':behavior.mode==='hide'?'afraid':'happy'});
 }
 function advanceDistance(d){
-  if(paused)return;
+  if(paused||vitals.dead)return;
   if(despair.active||afterglow?.step.type==='toySleep')return;
   const target=distanceTarget();
   if(target.mode!==distanceMode){
@@ -345,24 +407,25 @@ function advanceDistance(d){
   }
   // Follow-through gestures continue while the creature changes its distance.
   if(!afterglow||target.mode!=='neutral'){
-    const rate=Math.min(d*(target.mode==='hide'?1.5:.85),1);
+    const fatigue=vitals.hunger>=150?.35:vitals.hunger>=120?.6:1;
+    const rate=Math.min(d*(target.mode==='hide'?1.5:.85)*fatigue,1);
     x+=(target.x-x)*rate;
     y+=(target.y-y)*rate;
   }
 }
 function shelterOccludes(){
-  return !reaction&&distanceMode==='hide'&&x>500&&x<680&&y<490;
+  return !vitals.dead&&!reaction&&distanceMode==='hide'&&x>500&&x<680&&y<490;
 }
 let expressionMode='auto';
 let poseMode='auto';
 function displayedFace(k,key){
-  return resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMode,despairActive:despair.active,speechIsRedCry,t,speechUntil,speechFace,attention,afterglow,distanceMode,canRelieve:t<reliefMemory.until});
+  return resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMode,despairActive:despair.active,speechIsRedCry,t,speechUntil,speechFace,attention,afterglow,distanceMode,canRelieve:t<reliefMemory.until,dead:vitals.dead});
 }
 function autoFace(k,key){
   return resolveIdleFace(k,key,emotions,t<reliefMemory.until);
 }
 function currentPose(k,key){
-  return resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive:despair.active,afterglow,distanceMode,baby:profile.baby,individual});
+  return resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive:despair.active,afterglow,distanceMode,baby:profile.baby,individual,dead:vitals.dead});
 }
 function mini(k){
   return posedSVG(k, 'stand', k==='white'?'smile':'neutral')
@@ -376,11 +439,14 @@ function updateProfile(){
   $('feature').textContent=profile.feature;
   $('avatar').innerHTML=mini(kind);
   $('nursery').hidden=!profile.baby;
-  $('picker-close').hidden=!selected;
+  $('picker-close').hidden=!selected||vitals.dead;
   canvas.setAttribute('aria-label', profile.name+'を閉じ込めた部屋')
 }
 function selectProfile(k, fresh=false, pickedIndividual=null){
   if(selected)persist();
+  $('end-screen').hidden=true;
+  $('game-main').inert=false;
+  deathAge=0;nextHungerAt=0;
   kind=k;
   profile=profiles[k];
   saved=fresh?{
@@ -393,7 +459,7 @@ function selectProfile(k, fresh=false, pickedIndividual=null){
   lastReply=null;
   speechUntil=0;
   distanceMode='neutral';
-  ({elapsed,logs,seen,toyPresent,pochettePresent,blanketPresent,bedOffset,actionCounts,repeatStreak,emotions,despair,itemAttachment,eventMemory,individual}=readProfileSnapshot(saved,k));
+  ({vitals,elapsed,logs,seen,toyPresent,pochettePresent,blanketPresent,bedOffset,actionCounts,repeatStreak,emotions,despair,itemAttachment,eventMemory,individual}=readProfileSnapshot(saved,k));
   profile=individualProfile(profile,k,individual);
   reliefMemory=createReliefMemory();
   states=makeStates();
@@ -415,9 +481,9 @@ function selectProfile(k, fresh=false, pickedIndividual=null){
     time:0,
     text:profile.name+'を、空き部屋へ連れてきた。'
   }];
-  enter(0);
+  if(vitals.dead)restoreEndedRun();else enter(0);
   last=performance.now();
-  $('choose').focus()
+  if(!vitals.dead)$('choose').focus()
 }
 function pickupIndividual(type){
   const picked=createIndividual(type);
@@ -459,10 +525,11 @@ function record(text, key){
 function persist(){
   if(!selected)return;
   writeSave(kind, {
-    elapsed, logs, seen:[...seen], blanket:blanketPresent, bedOffset, actionCounts, repeatStreak, emotions, toyPresent, pochettePresent, itemAttachment, despair, eventMemory, individual
+    vitals, elapsed, logs, seen:[...seen], blanket:blanketPresent, bedOffset, actionCounts, repeatStreak, emotions, toyPresent, pochettePresent, itemAttachment, despair, eventMemory, individual
   });
 }
 function enter(i){
+  if(vitals.dead)return;
   if(!blanketPresent&&(i===6||i===7))i=5;
   current=i;
   stateTime=0;
@@ -481,6 +548,7 @@ function enter(i){
   $('mood').textContent=emotionMood(emotions)
 }
 function speak(text,seconds=3,presentation={}){
+  if(vitals.dead)return;
   text=spokenText(text,kind);
   const chosen=lastReply?.text===text?lastReply:null;
   const tone=dialogueTone(text,presentation.tone||chosen?.tone||'neutral',reaction?careIds.includes(reaction.action):false);
@@ -496,7 +564,7 @@ function room(){
   drawRoom({night,blanketPresent,bedOffset,current,stateTime});
 }
 function resetCurrent(){
-  if(!selected)return;
+  if(!selected||vitals.dead)return;
   $('reset-dialog').hidden=false;
   $('reset-cancel').focus();
 }
@@ -527,62 +595,61 @@ function performReset(){
   actionUI();
 }
 function mouse(){
-  const key=reaction||afterglow||despair.active||distanceMode!=='neutral'?'look':states[current].key;
-  const anchor=drawCharacter({kind,baby:profile.baby,key,x,y,t,target:distanceTarget(),face:displayedFace(kind,key),pose:currentPose(kind,key),reaction,afterglow,despairActive:despair.active,toyPresent,pochettePresent});
+  const key=vitals.dead||reaction||afterglow||despair.active||distanceMode!=='neutral'?'look':states[current].key;
+  const anchor=drawCharacter({kind,baby:profile.baby,key,x,y,t,target:distanceTarget(),face:displayedFace(kind,key),pose:currentPose(kind,key),reaction,afterglow,despairActive:despair.active,toyPresent,pochettePresent,dead:vitals.dead});
   const view=sceneViewport(canvas.width,canvas.height);
   $('speech').style.left=((anchor.x*view.scale+view.offsetX)/canvas.width*100)+'%';
   $('speech').style.top=((anchor.y*view.scale+view.offsetY)/canvas.height*100)+'%';
 }
-function tick(now){
-  const dt=Math.min((now-last)/1000, .1);
-  last=now;
-  if(!paused&&$('picker').hidden&&$('reset-dialog').hidden){
-    let d=dt*speed;
-    t+=d;
-    elapsed+=d;
-    settleEmotions(d);
-    advanceItemMemory(d);
-    fadeEventMemory(eventMemory,d,!reaction&&emotions.fear<35&&emotions.hate<45);
-    advanceDespair(d);
-    if(reaction){
-      advanceReaction(d);
-    }
-    else if(despair.active){
-      stateTime+=d;
-      if(stateTime>=8){stateTime=0;presentDespair();}
-    }
-    else if(afterglow){
-      advanceDistance(d);
-      advanceAfterglow(d);
-    }
-    else{
-      stateTime+=d;
-      attention=Math.max(0, attention-d);
-      advanceDistance(d);
-      const s=states[current];
-      if(stateTime>s.duration){
-        if(!startItemMoment())enter(nextEmotionalState())
-      }
-    }
-    if(t>speechUntil)$('speech').classList.remove('show');
-    saveClock+=d;
-    if(saveClock>5){
-      saveClock=0;
-      persist()
+function advanceSimulation(d){
+  if(vitals.dead)return;
+  t+=d;
+  elapsed+=d;
+  const resting=blanketPresent&&(states[current].key==='sleep'||afterglow?.step.type==='toySleep');
+  if(advanceVitals(vitals,d,{elapsed,resting,recovering:!reaction&&!despair.active})){finishRun();return;}
+  settleEmotions(d);
+  advanceItemMemory(d);
+  fadeEventMemory(eventMemory,d,!reaction&&emotions.fear<35&&emotions.hate<45);
+  advanceDespair(d);
+  if(reaction)advanceReaction(d);
+  else if(despair.active){
+    stateTime+=d;
+    if(stateTime>=8){stateTime=0;presentDespair();}
+  }else if(afterglow){
+    advanceDistance(d);
+    advanceAfterglow(d);
+  }else{
+    stateTime+=d;
+    attention=Math.max(0,attention-d);
+    advanceDistance(d);
+    if(stateTime>states[current].duration){
+      if(!startHungerMoment()&&!startItemMoment())enter(nextEmotionalState());
     }
   }
+  if(t>speechUntil)$('speech').classList.remove('show');
+  saveClock+=d;
+  if(saveClock>5){saveClock=0;persist();}
+}
+function tick(now){
+  const dt=Math.max(0,Math.min((now-last)/1000,.1));
+  last=now;
+  if(vitals.dead){
+    if(!document.hidden&&$('end-screen').hidden&&$('picker').hidden){
+      deathAge+=dt;
+      if(deathAge>=vitalLimits.deathDisplaySeconds)showResults();
+    }
+  }else if(!document.hidden&&!paused&&$('picker').hidden&&$('reset-dialog').hidden)advanceSimulation(dt*speed);
   const view=sceneViewport(canvas.width,canvas.height);
   ctx.setTransform(1,0,0,1,0,0);
   ctx.fillStyle='#e6e3d5';
   ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.setTransform(view.scale, 0, 0, view.scale, view.offsetX, view.offsetY);
-  room();
-  mouse();
+  ctx.setTransform(view.scale,0,0,view.scale,view.offsetX,view.offsetY);
+  room();mouse();
   if(shelterOccludes())drawShelter();
   actionUI();
   $('timer').textContent=stamp(elapsed);
   $('compact-timer').textContent=stamp(elapsed);
-  requestAnimationFrame(tick)
+  requestAnimationFrame(tick);
 }
 function resize(){
   const r=canvas.getBoundingClientRect();
@@ -591,14 +658,25 @@ function resize(){
   canvas.height=r.height*d
 }
 function initialize() {
+  $('end-screen').hidden=true;
+  $('end-retry').onclick=()=>performReset();
+  $('end-pick').onclick=()=>{
+    $('end-screen').hidden=true;
+    $('picker').hidden=false;
+    $('picker-close').hidden=true;
+    $('options').querySelector('button').focus();
+  };
+  bindDialogKeyboard($('end-screen'),document,()=>[$('end-retry'),$('end-pick')],()=>{});
   setupCompactUI(document,window);
   for(const a of actionIds)$(a).onclick=()=>interfere(a);
   $('returnBlanket').onclick=()=>interfere('restore');
   $('expression').onchange=()=>{
+    if(vitals.dead)return;
     expressionMode=$('expression').value;
     $('face-mode').textContent=expressionMode==='auto'?'行動に合わせて変わります':'表情プレビュー中（行動は継続）'
   };
   $('pose').onchange=()=>{
+    if(vitals.dead)return;
     poseMode=$('pose').value;
   };
   for(const choice of pickupTypes){
@@ -609,12 +687,14 @@ function initialize() {
     $('options').append(b);
   }
   $('choose').onclick=()=>{
+    if(vitals.dead)return;
     persist();
     $('picker').hidden=false;
     $('picker-close').hidden=false;
     $('options').querySelector('button').focus()
   };
   $('picker-close').onclick=()=>{
+    if(vitals.dead){$('picker').hidden=true;showResults();return;}
     $('picker').hidden=true;
     last=performance.now();
     $('choose').focus()
@@ -631,6 +711,7 @@ function initialize() {
   $('reset').onclick=resetCurrent;
   new ResizeObserver(resize).observe(canvas);
   $('pause').onclick=()=>{
+    if(vitals.dead)return;
     paused=!paused;
     $('pause').textContent=paused?'▶ 再開':'Ⅱ 一時停止';
     $('pause').setAttribute('aria-pressed', paused);
@@ -638,11 +719,13 @@ function initialize() {
     persist()
   };
   $('speed').onclick=()=>{
+    if(vitals.dead)return;
     speed=speed===1?2:1;
     $('speed').textContent='速度 ×'+speed;
     $('speed').setAttribute('aria-pressed', speed===2)
   };
   $('light').onclick=()=>{
+    if(vitals.dead)return;
     night=!night;
     $('light').textContent=night?'☀ 昼にする':'☾ 夜にする';
     $('light').setAttribute('aria-pressed', night);
@@ -655,7 +738,7 @@ function initialize() {
     }
   };
   canvas.onclick=e=>{
-    if(paused||reaction||!$('picker').hidden||!$('reset-dialog').hidden||attention>0)return;
+    if(vitals.dead||paused||reaction||!$('picker').hidden||!$('reset-dialog').hidden||attention>0)return;
     const r=canvas.getBoundingClientRect(),
     view=sceneViewport(r.width,r.height),
     mx=(e.clientX-r.left-view.offsetX)/view.scale,
@@ -683,7 +766,7 @@ function initialize() {
   updateProfile();
   $('picker').hidden=!!selected;
   renderLog();
-  if(selected)enter(0);
+  if(selected){if(vitals.dead)restoreEndedRun();else enter(0);}
   else $('options').querySelector('button').focus();
   resize();
   requestAnimationFrame(tick);

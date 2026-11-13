@@ -1,3 +1,4 @@
+import { readVitals } from './vital-state.js';
 import { readRepeatStreak } from './action-repeat.js';
 import { readIndividual } from './individuality.js';
 import { readEventMemory } from './event-memory.js';
@@ -9,6 +10,7 @@ import { readAttachment } from './item-attachment.js';
 // Startup, profile switching and reset share the same save hydration.
 export function readProfileSnapshot(saved,kind){
   return {
+    vitals:readVitals(saved.vitals),
     individual:readIndividual(saved.individual,kind),
     elapsed:Number(saved.elapsed)||0,
     logs:Array.isArray(saved.logs)?saved.logs.slice(0,35):[],

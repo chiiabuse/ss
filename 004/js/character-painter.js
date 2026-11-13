@@ -1,3 +1,4 @@
+import { vitalLimits } from './vital-state.js';
 import { posedSVG } from './character-art.js';
 
 const CHARACTER_SCALE = 1.2;
@@ -9,20 +10,20 @@ export function characterDimensions(baby) {
 export function createCharacterPainter(ctx,painter){
   const {ellipse,line,round,drawPettingHand,drawShout,drawTapasta,drawCreamPuff,drawKumacha,drawPochette}=painter;
   const spriteCache=new Map();
-  function sprite(kind,pose,face,t){
+  function sprite(kind,pose,face,t,dead){
     const frame=pose==='stomp'?Math.floor(t*7)%2:0;
-    const id=kind+pose+face+frame;
+    const id=kind+pose+face+frame+(dead?"dead":"");
     if(!spriteCache.has(id)){
       const image=new Image();
-      image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(posedSVG(kind,pose,face,frame));
+      image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(posedSVG(kind,pose,face,frame,dead?vitalLimits.deathColor:null));
       spriteCache.set(id,image);
     }
     return spriteCache.get(id);
   }
-  return function drawCharacter({kind,baby,key,x,y,t,target,face,pose,reaction,afterglow,despairActive,toyPresent,pochettePresent}){
-    const moving=!despairActive&&Math.hypot(target.x-x,target.y-y)>5,
-    stepping=moving||key==='walk';
-    const bob=stepping?Math.sin(t*13)*2:Math.sin(t*2)*.7;
+  return function drawCharacter({kind,baby,key,x,y,t,target,face,pose,reaction,afterglow,despairActive,toyPresent,pochettePresent,dead=false}){
+    const moving=!dead&&!despairActive&&Math.hypot(target.x-x,target.y-y)>5,
+    stepping=!dead&&(moving||key==='walk');
+    const bob=dead?0:stepping?Math.sin(t*13)*2:Math.sin(t*2)*.7;
     const { width: w, height: h } = characterDimensions(baby);
     ellipse(x, y+4, w*.34, 7, '#68534322');
     ctx.save();
@@ -36,7 +37,7 @@ export function createCharacterPainter(ctx,painter){
     if(key==='walk')ctx.rotate(Math.sin(t*10)*.025);
     if(reaction?.lossScale>=1.1&&reaction.phase>0)ctx.translate(Math.sin(t*26)*(reaction.lossScale-1)*2,0);
     if(['cry', 'scared'].includes(face))ctx.translate(Math.sin(t*24)*.8, 0);
-    const im=sprite(kind, pose, face, t);
+    const im=sprite(kind, pose, face, t,dead);
     if(im.complete&&im.naturalWidth)ctx.drawImage(im, -w/2, -h, w, h);
     if(reaction?.action==='snack'&&reaction.phase>0){
       ellipse(w*.08,-h*.46,baby?2.3:3.8,baby?1.6:2.5,'#fffbed');

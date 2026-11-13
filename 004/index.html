@@ -12,7 +12,7 @@
 <i class="dot"></i>ちい虐・試作版
 </div>
 </header>
-<main>
+<main id="game-main">
 <div class="intro">
 <div>
 <div class="eyebrow">
@@ -153,6 +153,12 @@ SUBJECT 001
 </div>
 <div>
 <dt>体長</dt><dd id="length">約23cm</dd>
+</div>
+<div>
+<dt>身体ダメージ</dt><dd id="body-damage">0 / 100</dd>
+</div>
+<div>
+<dt>空腹</dt><dd id="hunger-status">満たされている · 0%</dd>
 </div>
 <div>
 <dt>特徴</dt><dd id="feature">右ほほに、土汚れ</dd>
@@ -335,6 +341,27 @@ SELECT SUBJECT
 </button>
 </div>
 </div>
+</div>
+<div class="veil end-screen" id="end-screen" hidden role="dialog" aria-modal="true" aria-labelledby="end-title">
+<section class="result-card">
+<div class="result-kicker">END · RESULT</div>
+<h2 id="end-title">この個体は死亡しました</h2>
+<p id="end-subject"></p>
+<dl class="result-stats">
+<div><dt>死因</dt><dd id="end-cause"></dd></div>
+<div><dt>経過時間</dt><dd id="end-time"></dd></div>
+</dl>
+<p id="end-personality" class="result-note"></p>
+<p id="end-emotions" class="result-note"></p>
+<p id="end-vitals" class="result-note"></p>
+<p id="end-summary" class="result-note"></p>
+<h3>操作の記録</h3>
+<div id="end-operations" class="result-operations"></div>
+<div class="result-buttons">
+<button id="end-retry">同じ個体でやり直す</button>
+<button id="end-pick">別の個体を拾う</button>
+</div>
+</section>
 </div>
 <script type="module" src="./js/app.js">
 </script>

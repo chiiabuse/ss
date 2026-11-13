@@ -8,7 +8,8 @@ export function resolveIdleFace(k,key,emotions,canRelieve=false){
   return emotionFace(emotions, idleFaces[k]?.[key]||'neutral',canRelieve);
 }
 
-export function resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMode,despairActive,speechIsRedCry,t,speechUntil,speechFace,attention,afterglow,distanceMode,canRelieve}){
+export function resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMode,despairActive,speechIsRedCry,t,speechUntil,speechFace,attention,afterglow,distanceMode,canRelieve,dead=false}){
+  if(dead)return 'smile';
   if(speechIsRedCry&&t<speechUntil&&(reaction||expressionMode==='auto'))return 'cry';
   if(reaction)return impactExpression(reaction.action,reaction.age)||reaction.face;
   if(expressionMode!=='auto')return expressionMode;
@@ -23,7 +24,8 @@ export function resolveDisplayedFace({kind:k,key,emotions,reaction,expressionMod
   return resolveIdleFace(k,key,emotions,canRelieve);
 }
 
-export function resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive,afterglow,distanceMode,baby,individual}){
+export function resolvePose({kind:k,key,emotions,reaction,poseMode,despairActive,afterglow,distanceMode,baby,individual,dead=false}){
+  if(dead)return 'collapsed';
   if(poseMode!=='auto')return poseMode;
   if(despairActive)return 'collapsed';
   if(afterglow&&!reaction)return afterglow.step.pose;
